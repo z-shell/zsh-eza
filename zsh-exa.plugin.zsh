@@ -14,10 +14,6 @@ if [[ ${zsh_loaded_plugins[-1]} != */zsh-exa && -z ${fpath[(r)${0:h}]} ]] {
 }
 
 .load-aliases() {
-  emulate -L zsh
-  setopt extended_glob warn_create_global typeset_silent no_short_loops rc_quotes no_auto_pushd
-  local exa_params=('--git' '--icons' '--classify' '--group-directories-first' '--time-style=long-iso' '--group' '--color-scale')
-  
   alias ls='exa ${exa_params}'
   alias l='exa --git-ignore ${exa_params}'
   alias ll='exa --all --header --long ${exa_params}'
@@ -32,5 +28,8 @@ if ! (( $+commands[exa] )); then
   print "exa not found on path. Please install exa before using this plugin." >&2
   return 1
 else
+  emulate -L zsh
+  setopt extended_glob warn_create_global typeset_silent no_short_loops rc_quotes no_auto_pushd
+  local exa_params=('--git' '--icons' '--classify' '--group-directories-first' '--time-style=long-iso' '--group' '--color-scale')
   .load-aliases
 fi
