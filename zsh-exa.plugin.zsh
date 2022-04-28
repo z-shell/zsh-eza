@@ -32,10 +32,10 @@ declare -a chpwd_functions exa_params
   exa ${exa_params}
 }
 
-if ! (( $+commands[exa] )); {
-  print "exa not found. Please install exa before using this plugin." >&2; 
+if ! (( $+commands[exa] )); then
+  print "exa not found. Please install exa before using this plugin." >&2
   return 1
-} else {
+else
   exa_params=('--git' '--icons' '--classify' '--group-directories-first' '--time-style=long-iso' '--group' '--color-scale')
   .alias-exa; [[ ${chpwd_functions[(r).auto-exa]} == .auto-exa ]] || chpwd_functions=( .auto-exa $chpwd_functions )
-}
+fi
