@@ -38,5 +38,5 @@ if ! (( $+commands[exa] )); then
   return 1
 else
   .alias-exa
-  [[ ${chpwd_functions[(r).auto-exa]} == .auto-exa ]] || chpwd_functions=( .auto-exa $chpwd_functions )
 fi
+[[ ${chpwd_functions[(r).auto-exa]} == .auto-exa ]] || chpwd_functions=( .auto-exa $chpwd_functions )
