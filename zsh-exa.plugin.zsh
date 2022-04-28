@@ -15,8 +15,7 @@ if [[ ${zsh_loaded_plugins[-1]} != */zsh-exa && -z ${fpath[(r)${0:h}]} ]] {
 
 emulate -L zsh
 setopt extended_glob warn_create_global typeset_silent no_short_loops rc_quotes no_auto_pushd
-
-declare -a chpwd_functions exa_params
+declare -a chpwd_functions exa_params auto-exa
 
 .alias-exa() {
   alias ls='exa ${exa_params}'
@@ -40,4 +39,4 @@ declare -a chpwd_functions exa_params
   [[ ${chpwd_functions[(r).auto-exa]} == .auto-exa ]] || chpwd_functions=( .auto-exa $chpwd_functions )
 }
 
-autoload .exa-zsh && .exa-zsh
+auto-exa=( .exa-zsh )
