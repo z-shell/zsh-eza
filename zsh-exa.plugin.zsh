@@ -34,7 +34,7 @@ if ! (( $+commands[exa] )); then
 else
   emulate -L zsh
   setopt extended_glob warn_create_global typeset_silent no_short_loops rc_quotes no_auto_pushd
-  declare -a chpwd_functions exa_params
+  declare -a chpwd_functions
   exa_params=('--git' '--icons' '--classify' '--group-directories-first' '--time-style=long-iso' '--group' '--color-scale')
   .alias-exa
 fi
