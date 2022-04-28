@@ -13,10 +13,6 @@ if [[ ${zsh_loaded_plugins[-1]} != */zsh-exa && -z ${fpath[(r)${0:h}]} ]] {
   fpath+=( "${0:h}" )
 }
 
-emulate -L zsh
-setopt extended_glob warn_create_global typeset_silent no_short_loops rc_quotes no_auto_pushd
-declare -a chpwd_functions exa_params
-
 .alias-exa() {
   alias ls='exa ${exa_params}'
   alias l='exa --git-ignore ${exa_params}'
@@ -36,6 +32,10 @@ if ! (( $+commands[exa] )); then
   print "exa not found. Please install exa before using this plugin." >&2
   return 1
 else
+  emulate -L zsh
+  setopt extended_glob warn_create_global typeset_silent no_short_loops rc_quotes no_auto_pushd
+  declare -a chpwd_functions exa_params
   exa_params=('--git' '--icons' '--classify' '--group-directories-first' '--time-style=long-iso' '--group' '--color-scale')
-  .alias-exa; [[ ${chpwd_functions[(r).auto-exa]} == .auto-exa ]] || chpwd_functions=( .auto-exa $chpwd_functions )
+  .alias-exa
 fi
+[[ ${chpwd_functions[(r).auto-exa]} == .auto-exa ]] || chpwd_functions=( .auto-exa $chpwd_functions )
