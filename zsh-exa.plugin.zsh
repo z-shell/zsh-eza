@@ -37,7 +37,8 @@ if ! (( $+commands[exa] )); then
   print "exa not found. Please install exa before using this plugin." >&2
   return 1
 else
-  local -a .auto-exa
+  .auto-exa
+  .alias-exa
   declare -a chpwd_functions
   [[ ${chpwd_functions[(r).auto-exa]} == .auto-exa ]] || chpwd_functions=( .auto-exa $chpwd_functions )
 fi
