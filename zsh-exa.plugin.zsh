@@ -18,7 +18,6 @@ setopt extended_glob warn_create_global typeset_silent no_short_loops rc_quotes 
 declare -a chpwd_functions exa_params
 
 .alias-exa() {
-  .exa-zsh
   alias ls='exa ${exa_params}'
   alias l='exa --git-ignore ${exa_params}'
   alias ll='exa --all --header --long ${exa_params}'
@@ -33,10 +32,10 @@ declare -a chpwd_functions exa_params
   exa ${exa_params}
 }
 
-.exa-zsh() {
-  if ! (( $+commands[exa] )) { print "exa not found. Please install exa before using this plugin." >&2; return 1; }
+if ! (( $+commands[exa] )); {
+  print "exa not found. Please install exa before using this plugin." >&2; 
+  return 1
+} else {
   exa_params=('--git' '--icons' '--classify' '--group-directories-first' '--time-style=long-iso' '--group' '--color-scale')
-  [[ ${chpwd_functions[(r).auto-exa]} == .auto-exa ]] || chpwd_functions=( .auto-exa $chpwd_functions )
+  .alias-exa; [[ ${chpwd_functions[(r).auto-exa]} == .auto-exa ]] || chpwd_functions=( .auto-exa $chpwd_functions )
 }
-
-.alias-exa
