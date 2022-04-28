@@ -40,4 +40,4 @@ declare -a chpwd_functions exa_params
   [[ ${chpwd_functions[(r).auto-exa]} == .auto-exa ]] || chpwd_functions=( .auto-exa $chpwd_functions )
 }
 
-autoload .exa-zsh
+autoload .exa-zsh && .exa-zsh
