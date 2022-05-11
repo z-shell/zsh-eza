@@ -36,6 +36,27 @@
 <tr><td><img align="center" style="width:100%;height:auto" src="https://user-images.githubusercontent.com/59910950/165784269-3a8a8bfe-f291-4a33-aac9-1afa2b7b767f.png" />
 </td></tr></table></div>
 
+## Default settings
+
+Sets `ls` alias to `exa`
+Auto list directories when entered.
+
+```shell
+ exa_params=('--git' '--icons' '--classify' '--group-directories-first' '--time-style=long-iso' '--group' '--color-scale')
+```
+
+## Default aliases
+
+```shell
+  l='exa --git-ignore ${exa_params}'
+  la='exa -lbhHigUmuSa'
+  ll='exa --all --header --long ${exa_params}'
+  llm='exa --all --header --long --sort=modified ${exa_params}'
+  ls='exa ${exa_params}'
+  lt='exa --tree'
+  lx='exa -lbhHigUmuSa@'
+```
+
 ## Install
 
 The `exa` should be present to use this plugin. Install `exa` with ZI:
@@ -60,7 +81,6 @@ Clone the repository and add `zsh-exa` to the plugins array of your zshrc file:
 ```sh
 ~/.oh-my-zsh/custom/plugins
 ```
-
 ```sh
 plugins=(... zsh-exa)
 ```
@@ -68,21 +88,3 @@ plugins=(... zsh-exa)
 ### Zplug
 
 Add `zplug zplugin/zsh-exa` to your `~/.zshrc` and re-open your terminal session.
-
-## Default settings
-
-```shell
- exa_params=('--git' '--icons' '--classify' '--group-directories-first' '--time-style=long-iso' '--group' '--color-scale')
-```
-
-## Default aliases
-
-```shell
-  l='exa --git-ignore ${exa_params}'
-  la='exa -lbhHigUmuSa'
-  ll='exa --all --header --long ${exa_params}'
-  llm='exa --all --header --long --sort=modified ${exa_params}'
-  ls='exa ${exa_params}'
-  lt='exa --tree'
-  lx='exa -lbhHigUmuSa@'
-```
