@@ -1,6 +1,7 @@
+<!-- markdownlint-disable MD041 -->
 <div align="center">
   <table style="width:100%;height:auto">
- <tr align="justify" margin-left="auto" margin-right="auto"><td align="center">
+    <tr><td align="center">
   <h1>
    <a title="❮ Zsh exa ❯" target="_self" href="https://github.com/z-shell/zsh-exa">
   <img style="width:60;height:60px"
@@ -81,6 +82,7 @@ Clone the repository and add `zsh-exa` to the plugins array of your zshrc file:
 ```sh
 ~/.oh-my-zsh/custom/plugins
 ```
+
 ```sh
 plugins=(... zsh-exa)
 ```
