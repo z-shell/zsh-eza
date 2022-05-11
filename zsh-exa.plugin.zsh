@@ -14,29 +14,29 @@ if [[ ${zsh_loaded_plugins[-1]} != */zsh-exa && -z ${fpath[(r)${0:h}]} ]] {
 }
 
 set_params() {
-  emulate -L zsh
-  setopt extended_glob
-  # warn_create_global typeset_silent no_short_loops rc_quotes no_auto_pushd
-  exa_params=('--git' '--icons' '--classify' '--group-directories-first' '--time-style=long-iso' '--group' '--color-scale')
-
-  alias ls='exa ${exa_params}'
-  alias l='exa --git-ignore ${exa_params}'
-  alias ll='exa --all --header --long ${exa_params}'
-  alias llm='exa --all --header --long --sort=modified ${exa_params}'
-  alias la='exa -lbhHigUmuSa'
-  alias lx='exa -lbhHigUmuSa@'
-  alias lt='exa --tree'
-  alias tree='exa --tree'
-}
-
-auto-exa() {
   if ! (( $+commands[exa] )); then
     print "exa not found. Please install exa before using this plugin." >&2
     return 1
   else
-    set_params
-    command exa ${exa_params}
+    emulate -L zsh
+    setopt extended_glob
+    # warn_create_global typeset_silent no_short_loops rc_quotes no_auto_pushd
+    exa_params=('--git' '--icons' '--classify' '--group-directories-first' '--time-style=long-iso' '--group' '--color-scale')
+
+    alias ls='exa ${exa_params}'
+    alias l='exa --git-ignore ${exa_params}'
+    alias ll='exa --all --header --long ${exa_params}'
+    alias llm='exa --all --header --long --sort=modified ${exa_params}'
+    alias la='exa -lbhHigUmuSa'
+    alias lx='exa -lbhHigUmuSa@'
+    alias lt='exa --tree'
+    alias tree='exa --tree'
   fi
 }
 
+auto-exa() {
+  command exa ${exa_params}
+}
+
+set_params
 [[ ${chpwd_functions[(r)auto-exa]} == auto-exa ]] || chpwd_functions=( auto-exa $chpwd_functions )
