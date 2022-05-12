@@ -42,6 +42,6 @@ local enable_autocd=0
 [[ "$AUTOCD" = <-> ]] && enable_autocd="$AUTOCD"
 
 set_params
-if [[ "$AUTOCD" = "1" ]]; then
+if [[ "$enable_autocd" = "1" ]]; then
   [[ ${chpwd_functions[(r)auto-exa]} == auto-exa ]] || chpwd_functions=( auto-exa $chpwd_functions )
 fi
