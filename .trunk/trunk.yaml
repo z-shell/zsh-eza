@@ -4,10 +4,10 @@ cli:
 repo:
   repo:
     host: github.com
-    owner: z-shell
-    name: zw
+    owner: zplugin
+    name: zsh-exa
 lint:
   enabled:
-    - gitleaks@8.3.0
+    - gitleaks@8.8.4
     - markdownlint@0.31.1
-    - prettier@2.5.1
+    - prettier@2.6.2
