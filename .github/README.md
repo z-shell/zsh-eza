@@ -39,8 +39,8 @@
 
 ## Default settings
 
-Sets `ls` alias to `exa`
-Auto list directories when entered.
+Sets paramters and aliases for `exa` to replace `ls`,
+Enable auto list directories on `cd` with `export AUTOCD=1`.
 
 ```shell
  exa_params=('--git' '--icons' '--classify' '--group-directories-first' '--time-style=long-iso' '--group' '--color-scale')
@@ -67,7 +67,7 @@ zi ice from'gh-r' as'program' sbin'**/exa -> exa' atclone'cp -vf completions/exa
 zi light ogham/exa
 ```
 
-### [ZI](https://github.com/z-shell/zi)
+### With [ZI](https://github.com/z-shell/zi)
 
 To install add to the `.zshrc` file:
 
@@ -75,7 +75,29 @@ To install add to the `.zshrc` file:
 zi light zplugin/zsh-exa
 ```
 
-### [Oh My Zsh](https://ohmyz.sh/)
+Install only if exa exists and enable auto list directories:
+
+```shell
+zi ice has'exa' atinit'AUTOCD=1'
+zi light zplugin/zsh-exa
+```
+
+Install only if exa exists and enable auto list directories in turbo mode:
+
+```shell
+zi ice wait lucid has'exa' atinit'AUTOCD=1'
+zi light zplugin/zsh-exa
+```
+
+Install only if exa exists and enable auto list directories in turbo mode with the for syntax:
+
+```shell
+zi wait lucid for \
+  has'exa' atinit'AUTOCD=1' \
+    zplugin/zsh-exa
+```
+
+### With [Oh My Zsh](https://ohmyz.sh/)
 
 Clone the repository and add `zsh-exa` to the plugins array of your zshrc file:
 
@@ -87,6 +109,6 @@ Clone the repository and add `zsh-exa` to the plugins array of your zshrc file:
 plugins=(... zsh-exa)
 ```
 
-### Zplug
+### With Zplug
 
 Add `zplug zplugin/zsh-exa` to your `~/.zshrc` and re-open your terminal session.
