@@ -18,8 +18,7 @@ set_params() {
     print "exa not found. Please install exa before using this plugin." >&2
     return 1
   else
-    emulate -L zsh
-    setopt extended_glob
+    builtin emulate -L zsh -o extended_glob
     exa_params=('--git' '--icons' '--classify' '--group-directories-first' '--time-style=long-iso' '--group' '--color-scale')
 
     alias ls='exa ${exa_params}'
