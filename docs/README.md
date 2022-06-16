@@ -1,4 +1,3 @@
-<!-- markdownlint-disable MD041 -->
 <div align="center">
   <table style="width:100%;height:auto">
     <tr><td align="center">
