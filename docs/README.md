@@ -39,14 +39,15 @@
 
 ## Default settings
 
-Sets paramters and aliases for `exa` to replace `ls`,
-Enable auto list directories on `cd` with `export AUTOCD=1`.
+Sets paramters and aliases for `exa` to replace `ls`, enable auto list directories on `cd` with `export AUTOCD=1`.
+
+### Parameters
 
 ```shell
  exa_params=('--git' '--icons' '--classify' '--group-directories-first' '--time-style=long-iso' '--group' '--color-scale')
 ```
 
-## Default aliases
+### Aliases
 
 ```shell
   l='exa --git-ignore ${exa_params}'
