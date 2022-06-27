@@ -18,13 +18,10 @@
 </h3></td></tr>
 <tr>
 <td align="center">
-  <a title="Crowdin" target="_self" href="https://crowdin.digitalclouds.dev/z-shell">
-    <img align="center" src="https://badges.crowdin.net/e/f108c12713ee8526ac878d5671ad6e29/localized.svg" />
+  <a target="_self" href="https://github.com/zplugin/zsh-exa/actions/workflows/trunk-check.yml">
+    <img align="center" src="https://github.com/zplugin/zsh-exa/actions/workflows/trunk-check.yml/badge.svg?branch=main" alt="⭕ Trunk Check" />
   </a>
-  <a title="zsh-exa" target="_self" href="https://github.com/z-shell/zsh-exa/">
-    <img align="center" src="https://img.shields.io/badge/--019733?logo=vim" alt="Zsh exa" />
-  </a>
-  <a title="zsh-exa" target="_self" href="https://open.vscode.dev/z-shell/zsh-exa/">
+  <a target="_self" href="https://open.vscode.dev/z-shell/zsh-exa/">
     <img
       align="center"
       src="https://img.shields.io/badge/--007ACC?logo=visual%20studio%20code&logoColor=ffffff"
