@@ -1,6 +1,6 @@
 version: 0.1
 cli:
-  version: 0.13.2-beta
+  version: 0.15.1-beta
 repo:
   repo:
     host: github.com
@@ -9,10 +9,12 @@ repo:
 lint:
   linters:
     - name: markdownlint
-      command: [markdownlint, -q, --config, .github/.markdownlint.yaml, "${target}"]
+      command:
+        [markdownlint, -q, --config, .github/.markdownlint.yaml, "${target}"]
       direct_configs: [.github/.markdownlint.yaml]
   enabled:
-    - actionlint@1.6.14
-    - gitleaks@8.8.8
-    - markdownlint@0.31.1
+    - git-diff-check@SYSTEM
+    - actionlint@1.6.15
+    - gitleaks@8.9.0
+    - markdownlint@0.32.1
     - prettier@2.7.1

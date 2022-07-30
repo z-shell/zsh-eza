@@ -1,0 +1,33 @@
+#autoload
+# -*- mode: zsh; sh-indentation: 2; indent-tabs-mode: nil; sh-basic-offset: 2; -*-
+# vim: ft=zsh sw=2 ts=2 et
+#
+# Copyright (c) 2022 Salvydas Lukosius
+
+builtin emulate -L zsh ${=${options[xtrace]:#off}:+-o xtrace}
+builtin setopt extended_glob warn_create_global typeset_silent
+
+if (( ! $+commands[exa] )); then
+  print "Please install exa before using this plugin." >&2
+  return 1
+else
+  local enable_autocd=0
+  typeset -ag exa_params
+  exa_params=('--git' '--icons' '--classify' '--group-directories-first' '--time-style=long-iso' '--group' '--color-scale')
+
+  alias ls='exa ${exa_params}'
+  alias l='exa --git-ignore ${exa_params}'
+  alias ll='exa --all --header --long ${exa_params}'
+  alias llm='exa --all --header --long --sort=modified ${exa_params}'
+  alias la='exa -lbhHigUmuSa'
+  alias lx='exa -lbhHigUmuSa@'
+  alias lt='exa --tree'
+  alias tree='exa --tree'
+
+  [[ "$AUTOCD" = <-> ]] && enable_autocd="$AUTOCD"
+  if [[ "$enable_autocd" == "1" ]]; then
+    # Function for cd auto list directories
+    →auto-exa() { command exa ${exa_params}; }
+    [[ ${chpwd_functions[(r)→auto-exa]} == →auto-exa ]] || chpwd_functions=( →auto-exa $chpwd_functions )
+  fi
+fi
