@@ -1,0 +1,12 @@
+{
+  "cSpell.enableFiletypes": ["shellscript"],
+  "cSpell.words": [
+    "ARGZERO",
+    "autocd",
+    "autoload",
+    "chpwd",
+    "fpath",
+    "PMSPEC",
+    "setopt"
+  ]
+}
