@@ -5,7 +5,7 @@
    <a title="❮ Zsh exa ❯" target="_self" href="https://github.com/z-shell/zsh-exa">
   <img style="width:60px;height:60px"
     src="https://raw.githubusercontent.com/z-shell/zi/main/docs/images/logo.svg"
-    alt="Logo" /></a>❮ ZI ❯ - Zsh exa
+    alt="Logo" /></a>❮ Zi ❯ - Zsh exa
   </h1>
   <h2>
   Zsh plugin which replace GNU/ls with <a target="_self" href="https://github.com/ogham/exa">ogham/exa</a>
@@ -58,14 +58,14 @@ alias tree='exa --tree $exa_params'
 
 ## Install
 
-The `exa` should be present to use this plugin. Install `exa` with ZI:
+The `exa` should be present to use this plugin. Install `exa` with Zi:
 
 ```shell
 zi ice from'gh-r' as'program' sbin'**/exa -> exa' atclone'cp -vf completions/exa.zsh _exa'
 zi light ogham/exa
 ```
 
-### With [ZI](https://github.com/z-shell/zi)
+### With [Zi](https://github.com/z-shell/zi)
 
 To install add to the `.zshrc` file:
 
