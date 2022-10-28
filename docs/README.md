@@ -5,7 +5,7 @@
    <a title="❮ Zsh exa ❯" target="_self" href="https://github.com/z-shell/zsh-exa">
   <img style="width:60px;height:60px"
     src="https://raw.githubusercontent.com/z-shell/zi/main/docs/images/logo.svg"
-    alt="Logo" /></a>❮ Zi ❯ - Zsh exa
+    alt="Logo" /></a>❮ Zsh exa ❯
   </h1>
   <h2>
   Zsh plugin which replace GNU/ls with <a target="_self" href="https://github.com/ogham/exa">ogham/exa</a>
