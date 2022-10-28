@@ -40,19 +40,20 @@ Sets paramters and aliases for `exa` to replace `ls`, enable auto list directori
 ### Parameters
 
 ```shell
- exa_params=('--git' '--icons' '--classify' '--group-directories-first' '--time-style=long-iso' '--group' '--color-scale')
+exa_params=('--git' '--icons' '--classify' '--group-directories-first' '--time-style=long-iso' '--group' '--color-scale')
 ```
 
 ### Aliases
 
 ```shell
-  l='exa --git-ignore ${exa_params}'
-  la='exa -lbhHigUmuSa'
-  ll='exa --all --header --long ${exa_params}'
-  llm='exa --all --header --long --sort=modified ${exa_params}'
-  ls='exa ${exa_params}'
-  lt='exa --tree'
-  lx='exa -lbhHigUmuSa@'
+alias ls='exa $exa_params'
+alias l='exa --git-ignore $exa_params'
+alias ll='exa --all --header --long $exa_params'
+alias llm='exa --all --header --long --sort=modified $exa_params'
+alias la='exa -lbhHigUmuSa'
+alias lx='exa -lbhHigUmuSa@'
+alias lt='exa --tree $exa_params'
+alias tree='exa --tree $exa_params'
 ```
 
 ## Install
