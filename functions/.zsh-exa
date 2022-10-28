@@ -7,7 +7,7 @@
 builtin emulate -L zsh ${=${options[xtrace]:#off}:+-o xtrace}
 builtin setopt extended_glob warn_create_global typeset_silent
 
-if (( ${+commands[exa]} )); then
+if (( $+commands[exa] )); then
   typeset enable_autocd=0
   typeset -ag exa_params
 
@@ -16,20 +16,20 @@ if (( ${+commands[exa]} )); then
     '--group-directories-first' '--time-style=long-iso' '--color-scale'
   )
 
-  alias ls='exa ${exa_params}'
-  alias l='exa --git-ignore ${exa_params}'
-  alias ll='exa --all --header --long ${exa_params}'
-  alias llm='exa --all --header --long --sort=modified ${exa_params}'
+  alias ls='exa $exa_params'
+  alias l='exa --git-ignore $exa_params'
+  alias ll='exa --all --header --long $exa_params'
+  alias llm='exa --all --header --long --sort=modified $exa_params'
   alias la='exa -lbhHigUmuSa'
   alias lx='exa -lbhHigUmuSa@'
-  alias lt='exa --tree'
-  alias tree='exa --tree'
+  alias lt='exa --tree $exa_params'
+  alias tree='exa --tree $exa_params'
 
   [[ "$AUTOCD" = <-> ]] && enable_autocd="$AUTOCD"
   if [[ "$enable_autocd" == "1" ]]; then
     # Function for cd auto list directories
-    →auto-exa() { command exa ${exa_params}; }
-    [[ ${chpwd_functions[(r)→auto-exa]} == →auto-exa ]] || chpwd_functions=( →auto-exa $chpwd_functions )
+    →auto-exa() { command exa $exa_params; }
+    [[ $chpwd_functions[(r)→auto-exa] == →auto-exa ]] || chpwd_functions=( →auto-exa $chpwd_functions )
   fi
 else
   print "Please install exa before using this plugin." >&2
