@@ -6,8 +6,17 @@ on:
     tags: ["v*.*.*"]
   pull_request:
     types: [opened, synchronize]
-  workflow_dispatch:
+  workflow_dispatch: {}
+
+concurrency:
+  group: ${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
 
 jobs:
   check:
-    uses: z-shell/.github/.github/workflows/trunk.yml@main
+    runs-on: ubuntu-latest
+    steps:
+      - name: ✅ Checkout
+        uses: actions/checkout@v3
+      - name: ✨ Trunk Check
+        uses: trunk-io/trunk-action@22e948f7bb9f870bc6c42625585f1ef27e9c5afc
