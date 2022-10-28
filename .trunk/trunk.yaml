@@ -1,20 +1,36 @@
 version: 0.1
+runtimes:
+  enabled:
+    - go@1.18.3
+    - node@16.14.2
 cli:
-  version: 0.16.1-beta
+  version: 1.0.1
+  options:
+    - commands: [check, fmt]
+    - args: -y
+plugins:
+  sources:
+    - id: trunk
+      ref: v0.0.5
+      uri: https://github.com/trunk-io/plugins
 repo:
   repo:
     host: github.com
     owner: zplugin
     name: zsh-exa
-lint:
-  linters:
-    - name: markdownlint
-      command:
-        [markdownlint, -q, --config, .github/.markdownlint.yaml, "${target}"]
-      direct_configs: [.github/.markdownlint.yaml]
+actions:
   enabled:
-    - git-diff-check@SYSTEM
-    - actionlint@1.6.15
-    - gitleaks@8.10.3
-    - markdownlint@0.32.1
+    - trunk-announce
+    - trunk-upgrade-available
+    - trunk-check-pre-push
+    - trunk-fmt-pre-commit
+    - trunk-cache-prune
+    - trunk-check-upgrade
+    - trunk-upgrade
+lint:
+  enabled:
+    - markdownlint@0.32.2
     - prettier@2.7.1
+    - git-diff-check@SYSTEM
+    - actionlint@1.6.21
+    - gitleaks@8.15.0

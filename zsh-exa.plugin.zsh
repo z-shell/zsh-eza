@@ -11,7 +11,6 @@
 # https://wiki.zshell.dev/community/zsh_plugin_standard#standard-plugins-hash
 typeset -gA Plugins
 Plugins[ZSH_EXA]="${0:h}"
-Plugins[ZSH_EXA_VERSION]="1.0.0"
 
 # https://wiki.zshell.dev/community/zsh_plugin_standard#funtions-directory
 if [[ $PMSPEC != *f* ]]; then
