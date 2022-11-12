@@ -4,14 +4,14 @@ runtimes:
     - go@1.18.3
     - node@16.14.2
 cli:
-  version: 1.0.1
+  version: 1.1.0
   options:
     - commands: [check, fmt]
     - args: -y
 plugins:
   sources:
     - id: trunk
-      ref: v0.0.5
+      ref: v0.0.6
       uri: https://github.com/trunk-io/plugins
 repo:
   repo:
@@ -21,16 +21,14 @@ repo:
 actions:
   enabled:
     - trunk-announce
-    - trunk-upgrade-available
     - trunk-check-pre-push
     - trunk-fmt-pre-commit
+    - trunk-upgrade-available
     - trunk-cache-prune
-    - trunk-check-upgrade
-    - trunk-upgrade
 lint:
   enabled:
     - markdownlint@0.32.2
     - prettier@2.7.1
     - git-diff-check@SYSTEM
-    - actionlint@1.6.21
+    - actionlint@1.6.22
     - gitleaks@8.15.0
