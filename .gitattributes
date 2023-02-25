@@ -53,6 +53,7 @@
 *.fish     text eol=lf
 *.sh       text eol=lf
 *.zsh      text eol=lf
+functions/.zsh-exa text eol=lf
 # These are explicitly windows files and should use crlf
 *.bat      text eol=crlf
 *.cmd      text eol=crlf

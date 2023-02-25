@@ -21,10 +21,7 @@ autoload -Uz .zsh-exa
 
 # Load plugin
 (( ${+functions[.zsh-exa]} )) && {
-  .zsh-exa; exit_code=$?
-}
-
-(( exit_code )) && {
-  print "Error loading zsh-exa plugin, exit code: $exit_code"
-  exit $exit_code
+  .zsh-exa; (( $? )) && {
+    print "Error loading zsh-exa plugin, exit code: $?"
+    exit 1
 }
