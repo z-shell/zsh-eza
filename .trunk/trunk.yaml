@@ -4,11 +4,11 @@ runtimes:
     - go@1.18.3
     - node@16.14.2
 cli:
-  version: 1.2.1
+  version: 1.5.1
 plugins:
   sources:
     - id: trunk
-      ref: v0.0.8
+      ref: v0.0.12
       uri: https://github.com/trunk-io/plugins
 repo:
   repo:
@@ -17,6 +17,7 @@ repo:
     name: zsh-exa
 actions:
   enabled:
+    - git-blame-ignore-revs
     - trunk-announce
     - trunk-check-pre-push
     - trunk-fmt-pre-commit
@@ -24,8 +25,8 @@ actions:
     - trunk-cache-prune
 lint:
   enabled:
-    - markdownlint@0.32.2
-    - prettier@2.8.1
+    - markdownlint@0.33.0
+    - prettier@2.8.4
     - git-diff-check@SYSTEM
-    - actionlint@1.6.22
-    - gitleaks@8.15.2
+    - actionlint@1.6.23
+    - gitleaks@8.15.3
