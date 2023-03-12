@@ -12,14 +12,14 @@
   </h2>
 <h3>
   <a href="https://github.com/orgs/z-shell/discussions/">《❔》Ask a Question </a>
-  <a href="https://z.digitalclouds.dev/search/">《💡》Search Wiki </a>
+  <a href="https://wiki.zshell.dev/search/">《💡》Search Wiki </a>
   <a href="https://github.com/z-shell/community/issues/new?assignees=&labels=%F0%9F%91%A5+member&template=membership.yml&title=team%3A+">《💜》Join </a>
   <a href="https://digitalclouds.crowdin.com/z-shell/">《🌐》Localize </a>
 </h3></td></tr>
 <tr>
 <td align="center">
   <a target="_self" href="https://github.com/zplugin/zsh-exa/actions/workflows/trunk-check.yml">
-    <img align="center" src="https://github.com/zplugin/zsh-exa/actions/workflows/trunk-check.yml/badge.svg?branch=main" alt="⭕ Trunk Check" />
+    <img align="center" src="https://github.com/z-shell/zsh-exa/actions/workflows/trunk-check.yml/badge.svg?branch=main" alt="⭕ Trunk Check" />
   </a>
   <a target="_self" href="https://open.vscode.dev/z-shell/zsh-exa/">
     <img
