@@ -24,4 +24,6 @@ autoload -Uz .zsh-exa
   .zsh-exa; (( $? )) && {
     print "Error loading zsh-exa plugin, exit code: $?"
     exit 1
+  }
 }
+
