@@ -14,7 +14,7 @@ repo:
   repo:
     host: github.com
     owner: zplugin
-    name: zsh-exa
+    name: zsh-eza
 actions:
   enabled:
     - git-blame-ignore-revs
