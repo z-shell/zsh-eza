@@ -18,7 +18,7 @@
 </h3></td></tr>
 <tr>
 <td align="center">
-  <a target="_self" href="https://github.com/zplugin/zsh-eza/actions/workflows/trunk-check.yml">
+  <a target="_self" href="https://github.com/z-shell/zsh-eza/actions/workflows/trunk-check.yml">
     <img align="center" src="https://github.com/z-shell/zsh-eza/actions/workflows/trunk-check.yml/badge.svg?branch=main" alt="⭕ Trunk Check" />
   </a>
   <a target="_self" href="https://open.vscode.dev/z-shell/zsh-eza/">
@@ -70,21 +70,21 @@ zi light eza-community/eza
 To install add to the `.zshrc` file:
 
 ```shell
-zi light zplugin/zsh-eza
+zi light z-shell/zsh-eza
 ```
 
 Install only if eza exists and enable auto list directories:
 
 ```shell
 zi ice has'eza' atinit'AUTOCD=1'
-zi light zplugin/zsh-eza
+zi light z-shell/zsh-eza
 ```
 
 Install only if eza exists and enable auto list directories in turbo mode:
 
 ```shell
 zi ice wait lucid has'eza' atinit'AUTOCD=1'
-zi light zplugin/zsh-eza
+zi light z-shell/zsh-eza
 ```
 
 Install only if eza exists and enable auto list directories in turbo mode with the for syntax:
@@ -92,7 +92,7 @@ Install only if eza exists and enable auto list directories in turbo mode with t
 ```shell
 zi wait lucid for \
   has'eza' atinit'AUTOCD=1' \
-    zplugin/zsh-eza
+    z-shell/zsh-eza
 ```
 
 ### With [Oh My Zsh](https://ohmyz.sh/)
@@ -109,4 +109,4 @@ plugins=(... zsh-eza)
 
 ### With Zplug
 
-Add `zplug zplugin/zsh-eza` to your `~/.zshrc` and re-open your terminal session.
+Add `zplug z-shell/zsh-eza` to your `~/.zshrc` and re-open your terminal session.
