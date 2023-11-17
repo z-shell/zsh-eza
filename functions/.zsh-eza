@@ -15,8 +15,8 @@ if (( $+commands[eza] )); then
   typeset -ag eza_params
 
   eza_params=(
-    '--git' '--icons' '--classify' '--group'
-    '--group-directories-first' '--time-style=long-iso' '--color-scale'
+    '--git' '--icons' '--group' '--group-directories-first'
+    '--time-style=long-iso' '--color-scale=all'
   )
 
   alias ls='eza $eza_params'
