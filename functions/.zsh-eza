@@ -1,7 +1,7 @@
 # -*- mode: zsh; sh-indentation: 2; indent-tabs-mode: nil; sh-basic-offset: 2; -*-
 # vim: ft=zsh sw=2 ts=2 et
 #
-# Copyright (c) 2022 Salvydas Lukosius
+# Copyright (c) 2022 Zsh Community
 
 if [[ $TERM == 'dumb' ]]; then
   return 1
@@ -14,11 +14,19 @@ if (( $+commands[eza] )); then
   typeset enable_autocd=0
   typeset -ag eza_params
 
-  eza_params=(
-    '--git' '--icons' '--group' '--group-directories-first'
-    '--time-style=long-iso' '--color-scale=all'
-  )
+  if [[ -n "$eza_user_params" ]]; then
+    eza_params=( ${eza_user_params} )
+  else
+    eza_params=(
+      '--git' '--icons' '--group' '--group-directories-first'
+      '--time-style=long-iso' '--color-scale=all'
+    )
+  fi
 
+  if [[ -n "$eza_extra_params" ]]; then
+    eza_params+=( ${eza_extra_params} )
+  else
+  
   alias ls='eza $eza_params'
   alias l='eza --git-ignore $eza_params'
   alias ll='eza --all --header --long $eza_params'
