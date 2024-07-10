@@ -10,14 +10,17 @@ fi
 builtin emulate -L zsh ${=${options[xtrace]:#off}:+-o xtrace}
 builtin setopt extended_glob warn_create_global typeset_silent
 
+
 if (( $+commands[eza] )); then
   typeset enable_autocd=0
   typeset -ag eza_params
 
   eza_params=(
-    '--git' '--icons' '--group' '--group-directories-first'
-    '--time-style=long-iso' '--color-scale=all'
+    '--git' '--group' '--group-directories-first'
+    '--time-style=long-iso' '--color-scale=all' '--icons'
   )
+
+  [[ ! -z $_EZA_PARAMS ]] && eza_params=($_EZA_PARAMS)
 
   alias ls='eza $eza_params'
   alias l='eza --git-ignore $eza_params'
