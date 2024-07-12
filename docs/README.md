@@ -33,15 +33,12 @@
 <tr><td><img align="center" style="width:100%;height:auto" src="https://user-images.githubusercontent.com/59910950/165784269-3a8a8bfe-f291-4a33-aac9-1afa2b7b767f.png" />
 </td></tr></table></div>
 
-## Default settings
+### Environment variables
 
-Sets paramters and aliases for `eza` to replace `ls`, enable auto list directories on `cd` with `export AUTOCD=1`.
-
-### Parameters
-
-```shell
-eza_params=('--git' '--icons' '--classify' '--group-directories-first' '--time-style=long-iso' '--group' '--color-scale')
-```
+| Variable | Description | Default |
+| ------------- | -------------- | -------------- |
+| _EZA_PARAMS | eza params to be used | `('--git' '--group' '--group-directories-first' '--time-style=long-iso' '--color-scale=all' '--icons')` |
+| AUTOCD | enable auto list directories on `cd` | 0 |
 
 ### Aliases
 
