@@ -1,6 +1,6 @@
 if [[ $TERM == 'dumb' ]]; then
   print "Error loading zsh-eza: plugin used in a dumb terminal." >&2
-  return 1
+  return
 fi
 
 builtin emulate -L zsh ${=${options[xtrace]:#off}:+-o xtrace}
@@ -28,13 +28,11 @@ if (( $+commands[eza] )); then
 
   [[ "$AUTOCD" = <-> ]] && enable_autocd="$AUTOCD"
   if [[ "$enable_autocd" == "1" ]]; then
-    # Function for cd auto list directories
+    # Function to call eza when changing directory
     →auto-eza() { command eza $eza_params; }
     [[ $chpwd_functions[(r)→auto-eza] == →auto-eza ]] || chpwd_functions=( →auto-eza $chpwd_functions )
   fi
 else
-  print "Error loading zsh-eza: please install eza before using this plugin." >&2
-  return 1
+  print "Error loading zsh-eza: eza not found." >&2
+  return
 fi
-
-return 0

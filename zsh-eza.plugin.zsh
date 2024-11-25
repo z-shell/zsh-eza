@@ -15,8 +15,6 @@ autoload -Uz .zsh-eza
 
 # Load plugin
 (( ${+functions[.zsh-eza]} )) && {
-  .zsh-eza; (( $? )) && {
-    return # Ran into an error
-  }
+  .zsh-eza
 }
 
