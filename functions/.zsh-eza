@@ -4,6 +4,7 @@
 # Copyright (c) 2022 Salvydas Lukosius
 
 if [[ $TERM == 'dumb' ]]; then
+  print "Error loading zsh-eza: plugin used in a dumb terminal." >&2
   return 1
 fi
 
@@ -37,7 +38,7 @@ if (( $+commands[eza] )); then
     [[ $chpwd_functions[(r)→auto-eza] == →auto-eza ]] || chpwd_functions=( →auto-eza $chpwd_functions )
   fi
 else
-  print "Please install eza before using this plugin." >&2
+  print "Error loading zsh-eza: please install eza before using this plugin." >&2
   return 1
 fi
 
