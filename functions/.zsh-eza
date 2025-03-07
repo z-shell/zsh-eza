@@ -4,7 +4,8 @@
 # Copyright (c) 2022 Salvydas Lukosius
 
 if [[ $TERM == 'dumb' ]]; then
-  return 1
+  print "Dumb/non-tty terminal detected, skipping loading zsh-eza"
+  return 0
 fi
 
 builtin emulate -L zsh ${=${options[xtrace]:#off}:+-o xtrace}
