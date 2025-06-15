@@ -58,7 +58,7 @@ alias tree='eza --tree $eza_params'
 The `eza` should be present to use this plugin. Install `eza` with Zi:
 
 ```shell
-zi ice from'gh-r' as'program' sbin'**/eza -> eza' atclone'cp -vf completions/eza.zsh _eza'
+zi ice from'gh' as'program' sbin'**/eza -> eza' atclone'CARGO_HOME=$ZPFX cargo install --path . && cp -vf completions/eza.zsh _eza'
 zi light eza-community/eza
 ```
 
