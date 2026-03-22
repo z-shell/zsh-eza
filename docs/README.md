@@ -107,3 +107,14 @@ plugins=(... zsh-eza)
 ### With Zplug
 
 Add `zplug z-shell/zsh-eza` to your `~/.zshrc` and re-open your terminal session.
+
+### With [Antigen](https://github.com/zsh-users/antigen)
+
+Add to your `.zshrc` file:
+
+```sh
+antigen bundle z-shell/zsh-eza@main
+```
+
+Note: The @main branch suffix is required because this repository uses main as the default branch, while Antigen defaults to
+master.
