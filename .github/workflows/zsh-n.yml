@@ -34,6 +34,6 @@ jobs:
         run: |
           find . -type f \( -name '*.zsh' -o -path './functions/.*' \) -print | sort | while read -r file; do
             zsh -n "$file"
-            zsh -fc "zcompile ${file}"
+            zsh -fc 'zcompile -- "$1"' zsh "$file"
             rm -f "${file}.zwc"
           done
