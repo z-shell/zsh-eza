@@ -1,0 +1,39 @@
+---
+name: Zsh Syntax Check
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "*.zsh"
+      - "functions/.*"
+  pull_request:
+    branches: [main]
+    paths:
+      - "*.zsh"
+      - "functions/.*"
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  zsh-n:
+    name: Zsh Syntax Check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+      - name: Install zsh
+        run: sudo apt-get update && sudo apt-get install -yq zsh
+      - name: Check Zsh syntax
+        run: |
+          find . -type f \( -name '*.zsh' -o -path './functions/.*' \) -print | sort | while read -r file; do
+            zsh -n "$file"
+            zsh -fc "zcompile ${file}"
+            rm -f "${file}.zwc"
+          done
