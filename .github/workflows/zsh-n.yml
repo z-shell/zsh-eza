@@ -3,12 +3,12 @@ name: Zsh Syntax Check
 
 on:
   push:
-    branches: [main]
+    branches: [next, main]
     paths:
       - "*.zsh"
       - "functions/.*"
   pull_request:
-    branches: [main]
+    branches: [next, main]
     paths:
       - "*.zsh"
       - "functions/.*"
