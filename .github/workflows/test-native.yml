@@ -1,0 +1,50 @@
+---
+name: "ZUnit (native)"
+
+on:
+  push:
+    branches: [next, main]
+    paths:
+      - ".github/workflows/test-native.yml"
+      - "tests/**"
+      - "functions/.zsh-eza"
+      - "zsh-eza.plugin.zsh"
+  pull_request:
+    branches: [next, main]
+    paths:
+      - ".github/workflows/test-native.yml"
+      - "tests/**"
+      - "functions/.zsh-eza"
+      - "zsh-eza.plugin.zsh"
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  zunit:
+    name: "ZUnit: zsh-eza"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+      - name: Install zsh
+        run: sudo apt-get update && sudo apt-get install -yq zsh git curl
+      - name: Install zunit
+        run: |
+          mkdir -p bin
+          curl -fsSL 'https://raw.githubusercontent.com/zdharma/revolver/v0.2.4/revolver' > bin/revolver
+          curl -fsSL 'https://raw.githubusercontent.com/zdharma/color/d8f91ab5fcfceb623ae45d3333ad0e543775549c/color.zsh' > bin/color
+          git clone --depth 1 --branch v0.8.2 https://github.com/zdharma/zunit.git zunit.git
+          cd zunit.git && ./build.zsh && cd ..
+          mv zunit.git/zunit bin/
+          chmod u+x bin/{color,revolver,zunit}
+      - name: Run ZUnit suite
+        run: |
+          export PATH="$PWD/bin:$PATH"
+          export ZSH_EZA_REPO="$PWD"
+          zunit --tap --verbose tests/zsh-eza.zunit

@@ -1,0 +1,82 @@
+#!/usr/bin/env zunit
+#
+# -*- mode: zsh; sh-indentation: 2; indent-tabs-mode: nil; sh-basic-offset: 2; -*-
+# vim: ft=zsh sw=2 ts=2 et
+#
+
+@setup {
+  load setup
+  load helpers
+  setup
+}
+
+@teardown {
+  load setup
+  teardown
+}
+
+@test 'startup failure returns without exiting the shell when eza is missing' {
+  run_zsh_eza_shell '
+    source "${ZSH_EZA_REPO}/zsh-eza.plugin.zsh"
+    rc=$?
+    print -- "rc=${rc}"
+    print -- "after-source"
+  ' "${ZSH_EZA_TEST_EMPTY_PATH}"
+
+  assert $state equals 0
+  assert "$output" contains 'Please install eza before using this plugin.'
+  assert "$output" contains 'Error loading zsh-eza plugin, exit code: 1'
+  assert "$output" contains 'rc=1'
+  assert "$output" contains 'after-source'
+}
+
+@test 'scalar custom params are split into separate eza arguments' {
+  make_fake_eza
+
+  run_zsh_eza_shell '
+    eza_user_params="--git --icons"
+    eza_extra_params="--classify --tree"
+    source "${ZSH_EZA_REPO}/zsh-eza.plugin.zsh"
+    eval "${aliases[ls]}"
+  '
+
+  assert $state equals 0
+  assert "$output" contains 'fake-eza [--git] [--icons] [--classify] [--tree]'
+}
+
+@test 'unload restores aliases and removes the AUTOCD hook' {
+  make_fake_eza
+
+  run_zsh_eza_shell '
+    alias ls="ls --color=auto"
+    AUTOCD=1
+    source "${ZSH_EZA_REPO}/zsh-eza.plugin.zsh"
+    print -- "loaded=${aliases[ls]}"
+
+    if [[ ${chpwd_functions[(r)zsh-eza-auto-list]} == zsh-eza-auto-list ]]; then
+      print -- "hook=present"
+    fi
+
+    zsh-eza_plugin_unload
+    print -- "restored=${aliases[ls]}"
+
+    if (( ${+functions[zsh-eza-auto-list]} )); then
+      print -- "hook-function=present"
+    else
+      print -- "hook-function=removed"
+    fi
+
+    if [[ ${chpwd_functions[(r)zsh-eza-auto-list]} == zsh-eza-auto-list ]]; then
+      print -- "hook-entry=present"
+    else
+      print -- "hook-entry=removed"
+    fi
+  '
+
+  assert $state equals 0
+  assert "$output" contains 'loaded=eza ${(@)eza_params}'
+  assert "$output" contains 'hook=present'
+  assert "$output" contains 'restored=ls --color=auto'
+  assert "$output" contains 'hook-function=removed'
+  assert "$output" contains 'hook-entry=removed'
+}
