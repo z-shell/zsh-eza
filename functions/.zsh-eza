@@ -26,11 +26,11 @@ eza_params=(
 )
 
 if [[ -n ${eza_user_params-} ]]; then
-  eza_params=( ${eza_user_params} )
+  eza_params=( ${=eza_user_params} )
 fi
 
 if [[ -n ${eza_extra_params-} ]]; then
-  eza_params+=( ${eza_extra_params} )
+  eza_params+=( ${=eza_extra_params} )
 fi
 
 ZSH_EZA_ALIAS_NAMES=( ls l ll llm la lx lt tree )
@@ -52,7 +52,7 @@ builtin alias lx='eza -lbhHigUmuSa@'
 builtin alias lt='eza --tree ${(@)eza_params}'
 builtin alias tree='eza --tree ${(@)eza_params}'
 
-if [[ ${AUTOCD:-0} == <-> ]] && (( AUTOCD == 1 )); then
+if (( ${AUTOCD:-0} == 1 )); then
   autoload -Uz add-zsh-hook
 
   zsh-eza-auto-list() {
