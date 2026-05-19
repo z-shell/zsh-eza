@@ -4,47 +4,63 @@
 # Copyright (c) 2022 Zsh Community
 
 if [[ $TERM == 'dumb' ]]; then
-  return 1
+  return 0
 fi
 
 builtin emulate -L zsh ${=${options[xtrace]:#off}:+-o xtrace}
-builtin setopt extended_glob warn_create_global typeset_silent
+builtin setopt extended_glob warn_create_global typeset_silent no_short_loops rc_quotes no_auto_pushd
 
-if (( $+commands[eza] )); then
-  typeset enable_autocd=0
-  typeset -ag eza_params
-
-  if [[ -n "$eza_user_params" ]]; then
-    eza_params=( ${eza_user_params} )
-  else
-    eza_params=(
-      '--git' '--icons' '--group' '--group-directories-first'
-      '--time-style=long-iso' '--color-scale=all'
-    )
-  fi
-
-  if [[ -n "$eza_extra_params" ]]; then
-    eza_params+=( ${eza_extra_params} )
-  else
-  
-  alias ls='eza $eza_params'
-  alias l='eza --git-ignore $eza_params'
-  alias ll='eza --all --header --long $eza_params'
-  alias llm='eza --all --header --long --sort=modified $eza_params'
-  alias la='eza -lbhHigUmuSa'
-  alias lx='eza -lbhHigUmuSa@'
-  alias lt='eza --tree $eza_params'
-  alias tree='eza --tree $eza_params'
-
-  [[ "$AUTOCD" = <-> ]] && enable_autocd="$AUTOCD"
-  if [[ "$enable_autocd" == "1" ]]; then
-    # Function for cd auto list directories
-    →auto-eza() { command eza $eza_params; }
-    [[ $chpwd_functions[(r)→auto-eza] == →auto-eza ]] || chpwd_functions=( →auto-eza $chpwd_functions )
-  fi
-else
-  print "Please install eza before using this plugin." >&2
+if ! (( $+commands[eza] )); then
+  print -u2 "Please install eza before using this plugin."
   return 1
+fi
+
+typeset -ga eza_params
+typeset -ga ZSH_EZA_ALIAS_NAMES
+typeset -gA ZSH_EZA_SAVED_ALIASES
+typeset alias_name
+
+eza_params=(
+  '--git' '--icons' '--group' '--group-directories-first'
+  '--time-style=long-iso' '--color-scale=all'
+)
+
+if [[ -n ${eza_user_params-} ]]; then
+  eza_params=( ${eza_user_params} )
+fi
+
+if [[ -n ${eza_extra_params-} ]]; then
+  eza_params+=( ${eza_extra_params} )
+fi
+
+ZSH_EZA_ALIAS_NAMES=( ls l ll llm la lx lt tree )
+
+for alias_name in "${ZSH_EZA_ALIAS_NAMES[@]}"; do
+  if (( ${+aliases[$alias_name]} )); then
+    ZSH_EZA_SAVED_ALIASES[$alias_name]="${aliases[$alias_name]}"
+  else
+    unset "ZSH_EZA_SAVED_ALIASES[$alias_name]"
+  fi
+done
+
+builtin alias ls='eza ${(@)eza_params}'
+builtin alias l='eza --git-ignore ${(@)eza_params}'
+builtin alias ll='eza --all --header --long ${(@)eza_params}'
+builtin alias llm='eza --all --header --long --sort=modified ${(@)eza_params}'
+builtin alias la='eza -lbhHigUmuSa'
+builtin alias lx='eza -lbhHigUmuSa@'
+builtin alias lt='eza --tree ${(@)eza_params}'
+builtin alias tree='eza --tree ${(@)eza_params}'
+
+if [[ ${AUTOCD:-0} == <-> ]] && (( AUTOCD == 1 )); then
+  autoload -Uz add-zsh-hook
+
+  zsh-eza-auto-list() {
+    command eza "${eza_params[@]}"
+  }
+
+  add-zsh-hook -d chpwd zsh-eza-auto-list 2>/dev/null
+  add-zsh-hook chpwd zsh-eza-auto-list
 fi
 
 return 0
