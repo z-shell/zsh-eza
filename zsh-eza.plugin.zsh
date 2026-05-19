@@ -22,9 +22,9 @@ autoload -Uz .zsh-eza
 # Load plugin
 (( ${+functions[.zsh-eza]} )) && {
   .zsh-eza
-  typeset -i zsh_eza_plugin_exit_code=$?
-  (( zsh_eza_plugin_exit_code )) && {
-    print "Error loading zsh-eza plugin, exit code: ${zsh_eza_plugin_exit_code}"
-    return ${zsh_eza_plugin_exit_code}
+  typeset -i rc=$?
+  (( rc )) && {
+    print "Error loading zsh-eza plugin, exit code: ${rc}"
+    return ${rc}
   }
 }
