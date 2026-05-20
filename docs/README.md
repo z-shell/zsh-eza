@@ -73,7 +73,7 @@ alias tree='eza --tree ${(@)eza_params}'
 
 The `eza` should be present to use this plugin. Install `eza` with Zi:
 
-```zi
+```zsh
 zi ice from'gh-r' as'program' sbin'**/eza -> eza' atclone'cp -vf completions/eza.zsh _eza'
 zi light eza-community/eza
 ```
@@ -82,27 +82,27 @@ zi light eza-community/eza
 
 To install add to the `.zshrc` file:
 
-```zi
+```zsh
 zi light z-shell/zsh-eza
 ```
 
 Install only if eza exists and enable auto list directories:
 
-```zi
+```zsh
 zi ice has'eza' atinit'AUTOCD=1'
 zi light z-shell/zsh-eza
 ```
 
 Install only if eza exists and enable auto list directories in turbo mode:
 
-```zi
+```zsh
 zi ice wait lucid has'eza' atinit'AUTOCD=1'
 zi light z-shell/zsh-eza
 ```
 
 Install only if eza exists and enable auto list directories in turbo mode with the for syntax:
 
-```zi
+```zsh
 zi wait lucid for \
   has'eza' atinit'AUTOCD=1' \
     z-shell/zsh-eza
