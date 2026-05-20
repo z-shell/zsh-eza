@@ -154,3 +154,45 @@
   assert "$output" contains '[--long]'
   assert "$output" contains '[--git]'
 }
+
+@test 'eza_user_params replaces default params entirely' {
+  make_fake_eza
+
+  run_zsh_eza_shell '
+    eza_user_params="--only-this"
+    source "${ZSH_EZA_REPO}/zsh-eza.plugin.zsh"
+    if [[ "${(j: :)eza_params}" == "--only-this" ]]; then
+      print -- "params=replaced"
+    else
+      print -- "params=not-replaced:${(j: :)eza_params}"
+    fi
+    eval "${aliases[ls]}"
+  '
+
+  assert $state equals 0
+  assert "$output" contains 'params=replaced'
+  assert "$output" contains 'fake-eza [--only-this]'
+}
+
+@test 'eza_extra_params appends to default params without replacing them' {
+  make_fake_eza
+
+  run_zsh_eza_shell '
+    eza_extra_params="--extra-flag"
+    source "${ZSH_EZA_REPO}/zsh-eza.plugin.zsh"
+    if [[ "${eza_params[-1]}" == "--extra-flag" ]]; then
+      print -- "extra=appended"
+    else
+      print -- "extra=not-appended:last=${eza_params[-1]}"
+    fi
+    if [[ "${eza_params[1]}" == "--git" ]]; then
+      print -- "defaults=preserved"
+    else
+      print -- "defaults=missing:first=${eza_params[1]}"
+    fi
+  '
+
+  assert $state equals 0
+  assert "$output" contains 'extra=appended'
+  assert "$output" contains 'defaults=preserved'
+}
