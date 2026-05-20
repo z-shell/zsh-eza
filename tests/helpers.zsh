@@ -23,7 +23,23 @@ run_zsh_eza_shell() {
   run env \
     NO_COLOR=1 \
     TERM=xterm \
-    PMSPEC='0fuUpiPsX' \
+    PMSPEC='0uUpiPsX' \
+    PATH="${path_value}" \
+    ZSH_EZA_REPO="${ZSH_EZA_REPO}" \
+    ZSH_EZA_SCRIPT="${script}" \
+    "${shell_path}" -fc 'eval "${ZSH_EZA_SCRIPT}"'
+}
+
+run_zsh_eza_dumb_shell() {
+  local script=$1
+  local path_value=${2:-${ZSH_EZA_TEST_BIN}:${PATH}}
+  local shell_path
+  shell_path="$(command -v zsh)"
+
+  run env \
+    NO_COLOR=1 \
+    TERM=dumb \
+    PMSPEC='0uUpiPsX' \
     PATH="${path_value}" \
     ZSH_EZA_REPO="${ZSH_EZA_REPO}" \
     ZSH_EZA_SCRIPT="${script}" \
