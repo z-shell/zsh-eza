@@ -13,8 +13,9 @@ typeset -gA Plugins
 Plugins[ZSH_EZA]="${0:h}"
 
 # https://wiki.zshell.dev/community/zsh_plugin_standard#funtions-directory
+typeset -g ZSH_EZA_FPATH="${0:h}/functions"
 if [[ $PMSPEC != *f* ]]; then
-  fpath+=( "${0:h}/functions" )
+  fpath+=( "${ZSH_EZA_FPATH}" )
 fi
 
 autoload -Uz +X .zsh-eza
@@ -33,7 +34,7 @@ autoload -Uz +X .zsh-eza
 zsh-eza_plugin_unload() {
   local alias_name
 
-  fpath=("${fpath[@]:#${Plugins[ZSH_EZA]}/functions}")
+  fpath=("${fpath[@]:#${ZSH_EZA_FPATH}}")
 
   autoload -Uz add-zsh-hook
   add-zsh-hook -d chpwd zsh-eza-auto-list 2>/dev/null
@@ -44,11 +45,11 @@ zsh-eza_plugin_unload() {
     builtin unalias "${alias_name}" 2>/dev/null
 
     if (( ${+parameters[ZSH_EZA_SAVED_ALIASES]} )) && (( ${+ZSH_EZA_SAVED_ALIASES[$alias_name]} )); then
-      builtin alias "${alias_name}=${ZSH_EZA_SAVED_ALIASES[$alias_name]}"
+      aliases[$alias_name]="${ZSH_EZA_SAVED_ALIASES[$alias_name]}"
     fi
   done
 
-  unset eza_params ZSH_EZA_ALIAS_NAMES ZSH_EZA_SAVED_ALIASES 'Plugins[ZSH_EZA]'
+  unset eza_params ZSH_EZA_ALIAS_NAMES ZSH_EZA_SAVED_ALIASES ZSH_EZA_FPATH 'Plugins[ZSH_EZA]'
 
   unfunction zsh-eza_plugin_unload
 }
