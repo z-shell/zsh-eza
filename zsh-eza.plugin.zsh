@@ -13,7 +13,7 @@ typeset -gA Plugins
 Plugins[ZSH_EZA]="${0:h}"
 
 # https://wiki.zshell.dev/community/zsh_plugin_standard#funtions-directory
-if [[ ${fpath[(r)${0:h}/functions]} != "${0:h}/functions" ]]; then
+if [[ $PMSPEC != *f* ]]; then
   fpath+=( "${0:h}/functions" )
 fi
 
