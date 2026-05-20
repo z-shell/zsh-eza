@@ -1,0 +1,51 @@
+name: "Bug report 🐞"
+description: File a bug report
+labels: ["bug 🐞"]
+title: "bug: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to contribute! Any contributions you make are greatly appreciated.
+
+  - type: input
+    id: environment
+    attributes:
+      label: Environment
+      description: >
+        Your environment details with: echo "${OSTYPE}|$(uname -m)|${ZSH_VERSION}"
+      placeholder: "linux-gnu|x86_64|5.9"
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Current behavior
+      description: "Describe how the bug manifests"
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps to reproduce
+      description: "Explain the steps required to duplicate the issue"
+    validations:
+      required: true
+
+  - type: textarea
+    id: code-snippet
+    attributes:
+      label: Code snippet
+      description: "Paste your .zshrc snippet or the minimal reproducer"
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional information
+      description: "Any other relevant information"
+    validations:
+      required: false

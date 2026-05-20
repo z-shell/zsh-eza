@@ -1,0 +1,45 @@
+---
+name: "ZUnit (native)"
+
+on:
+  push:
+    branches: [next, main]
+    paths:
+      - ".github/workflows/test-native.yml"
+      - "tests/**"
+      - "functions/.zsh-eza"
+      - "zsh-eza.plugin.zsh"
+  pull_request:
+    branches: [next, main]
+    paths:
+      - ".github/workflows/test-native.yml"
+      - "tests/**"
+      - "functions/.zsh-eza"
+      - "zsh-eza.plugin.zsh"
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  zunit:
+    name: "ZUnit: zsh-eza"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+      - name: Set up Zsh
+        uses: z-shell/.github/actions/setup-zsh@62b432bd1e71895def33d16166c90bc3131eaaaf # main
+      - name: Install git and curl
+        run: sudo apt-get update && sudo apt-get install -yq git curl
+      - name: Make vendored bin executable
+        run: chmod u+x bin/{color,revolver,zunit}
+      - name: Run ZUnit suite
+        run: |
+          export PATH="$PWD/bin:$PATH"
+          export ZSH_EZA_REPO="$PWD"
+          zunit --tap --verbose tests/zsh-eza.zunit
