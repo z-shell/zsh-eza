@@ -32,8 +32,10 @@ jobs:
     steps:
       - name: Check out code
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
-      - name: Install zsh
-        run: sudo apt-get update && sudo apt-get install -yq zsh git curl
+      - name: Set up Zsh
+        uses: z-shell/.github/actions/setup-zsh@main
+      - name: Install git and curl
+        run: sudo apt-get update && sudo apt-get install -yq git curl
       - name: Install zunit
         run: |
           mkdir -p bin
