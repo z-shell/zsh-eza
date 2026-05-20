@@ -149,10 +149,7 @@
   '
 
   assert $state equals 0
-  assert "$output" contains '[--all]'
-  assert "$output" contains '[--header]'
-  assert "$output" contains '[--long]'
-  assert "$output" contains '[--git]'
+  assert "$output" contains 'fake-eza [--all] [--header] [--long] [--git]'
 }
 
 @test 'eza_user_params replaces default params entirely' {
@@ -190,11 +187,17 @@
     else
       print -- "defaults=missing:first=${eza_params[1]}"
     fi
+    if [[ "${eza_params[(r)--icons]}" == "--icons" ]]; then
+      print -- "middle=preserved"
+    else
+      print -- "middle=missing"
+    fi
   '
 
   assert $state equals 0
   assert "$output" contains 'extra=appended'
   assert "$output" contains 'defaults=preserved'
+  assert "$output" contains 'middle=preserved'
 }
 
 @test 'AUTOCD=1 registers zsh-eza-auto-list in chpwd_functions' {
