@@ -122,3 +122,35 @@
   assert "$output" contains 'alias:lt=present'
   assert "$output" contains 'alias:tree=present'
 }
+
+@test 'ls alias invokes eza with all default params' {
+  make_fake_eza
+
+  run_zsh_eza_shell '
+    source "${ZSH_EZA_REPO}/zsh-eza.plugin.zsh"
+    eval "${aliases[ls]}"
+  '
+
+  assert $state equals 0
+  assert "$output" contains 'fake-eza'
+  assert "$output" contains '[--git]'
+  assert "$output" contains '[--icons]'
+  assert "$output" contains '[--group-directories-first]'
+  assert "$output" contains '[--time-style=long-iso]'
+  assert "$output" contains '[--color-scale=all]'
+}
+
+@test 'll alias prepends --all --header --long before eza_params' {
+  make_fake_eza
+
+  run_zsh_eza_shell '
+    source "${ZSH_EZA_REPO}/zsh-eza.plugin.zsh"
+    eval "${aliases[ll]}"
+  '
+
+  assert $state equals 0
+  assert "$output" contains '[--all]'
+  assert "$output" contains '[--header]'
+  assert "$output" contains '[--long]'
+  assert "$output" contains '[--git]'
+}
