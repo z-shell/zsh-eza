@@ -1,0 +1,43 @@
+name: "Feature request 💡"
+description: Suggest an idea for this project
+labels: ["feature-request 💡"]
+title: "feat: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to contribute! Any contributions you make are greatly appreciated.
+
+  - type: input
+    id: description
+    attributes:
+      label: Feature description
+      description: A clear and concise description of what the feature request is
+    validations:
+      required: true
+
+  - type: dropdown
+    id: assistance
+    attributes:
+      label: "Would you be willing to submit a PR?"
+      options:
+        - "Yes"
+        - "No"
+    validations:
+      required: true
+
+  - type: textarea
+    id: code-snippet
+    attributes:
+      label: Related code or example
+      description: "If you can illustrate the feature with an example, please provide it here"
+    validations:
+      required: false
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional context
+      description: "Any other relevant information, links, or screenshots"
+    validations:
+      required: false

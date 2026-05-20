@@ -1,0 +1,16 @@
+name: "Codebase improvement ✨"
+description: Suggest a better solution for algorithms, CI, or tooling
+labels: ["enhancement ✨"]
+title: "dev: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to contribute! Any contributions you make are greatly appreciated.
+
+  - type: textarea
+    id: enhancement
+    attributes:
+      label: Your feedback for the existing codebase
+    validations:
+      required: false
