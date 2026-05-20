@@ -80,3 +80,45 @@
   assert "$output" contains 'hook-function=removed'
   assert "$output" contains 'hook-entry=removed'
 }
+
+@test 'default eza_params contains all six expected flags' {
+  make_fake_eza
+
+  run_zsh_eza_shell '
+    source "${ZSH_EZA_REPO}/zsh-eza.plugin.zsh"
+    print -- "${eza_params[@]}"
+  '
+
+  assert $state equals 0
+  assert "$output" contains '--git'
+  assert "$output" contains '--icons'
+  assert "$output" contains '--group'
+  assert "$output" contains '--group-directories-first'
+  assert "$output" contains '--time-style=long-iso'
+  assert "$output" contains '--color-scale=all'
+}
+
+@test 'all eight ls-style aliases are defined after load' {
+  make_fake_eza
+
+  run_zsh_eza_shell '
+    source "${ZSH_EZA_REPO}/zsh-eza.plugin.zsh"
+    for a in ls l ll llm la lx lt tree; do
+      if (( ${+aliases[$a]} )); then
+        print -- "alias:${a}=present"
+      else
+        print -- "alias:${a}=missing"
+      fi
+    done
+  '
+
+  assert $state equals 0
+  assert "$output" contains 'alias:ls=present'
+  assert "$output" contains 'alias:l=present'
+  assert "$output" contains 'alias:ll=present'
+  assert "$output" contains 'alias:llm=present'
+  assert "$output" contains 'alias:la=present'
+  assert "$output" contains 'alias:lx=present'
+  assert "$output" contains 'alias:lt=present'
+  assert "$output" contains 'alias:tree=present'
+}
