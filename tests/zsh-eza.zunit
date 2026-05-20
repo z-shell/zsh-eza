@@ -196,3 +196,52 @@
   assert "$output" contains 'extra=appended'
   assert "$output" contains 'defaults=preserved'
 }
+
+@test 'AUTOCD=1 registers zsh-eza-auto-list in chpwd_functions' {
+  make_fake_eza
+
+  run_zsh_eza_shell '
+    AUTOCD=1
+    source "${ZSH_EZA_REPO}/zsh-eza.plugin.zsh"
+    if [[ ${chpwd_functions[(r)zsh-eza-auto-list]} == zsh-eza-auto-list ]]; then
+      print -- "hook=registered"
+    else
+      print -- "hook=absent"
+    fi
+  '
+
+  assert $state equals 0
+  assert "$output" contains 'hook=registered'
+}
+
+@test 'AUTOCD=0 does not register chpwd hook' {
+  make_fake_eza
+
+  run_zsh_eza_shell '
+    AUTOCD=0
+    source "${ZSH_EZA_REPO}/zsh-eza.plugin.zsh"
+    if [[ ${chpwd_functions[(r)zsh-eza-auto-list]} == zsh-eza-auto-list ]]; then
+      print -- "hook=registered"
+    else
+      print -- "hook=absent"
+    fi
+  '
+
+  assert $state equals 0
+  assert "$output" contains 'hook=absent'
+}
+
+@test 'zsh-eza-auto-list hook invokes eza with default params' {
+  make_fake_eza
+
+  run_zsh_eza_shell '
+    AUTOCD=1
+    source "${ZSH_EZA_REPO}/zsh-eza.plugin.zsh"
+    zsh-eza-auto-list
+  '
+
+  assert $state equals 0
+  assert "$output" contains 'fake-eza'
+  assert "$output" contains '[--git]'
+  assert "$output" contains '[--icons]'
+}
