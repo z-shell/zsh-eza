@@ -1,7 +1,6 @@
 # AGENTS.md — z-shell/zsh-eza
 
 AI agent orientation for this repository.
-For workspace-wide rules see the root [`CLAUDE.md`](../../CLAUDE.md) / [`AGENTS.md`](../../AGENTS.md).
 For org-level standards see [`z-shell/.github`](https://github.com/z-shell/.github).
 
 ## What this repo is
