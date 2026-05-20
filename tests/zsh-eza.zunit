@@ -245,3 +245,42 @@
   assert "$output" contains '[--git]'
   assert "$output" contains '[--icons]'
 }
+
+@test 'dumb terminal returns 0 silently and sets no aliases' {
+  make_fake_eza
+
+  run_zsh_eza_dumb_shell '
+    source "${ZSH_EZA_REPO}/zsh-eza.plugin.zsh"
+    rc=$?
+    print -- "rc=${rc}"
+    if (( ! ${+aliases[ls]} )); then
+      print -- "ls=not-aliased"
+    else
+      print -- "ls=aliased"
+    fi
+  '
+
+  assert $state equals 0
+  assert "$output" contains 'rc=0'
+  assert "$output" contains 'ls=not-aliased'
+}
+
+@test 'unload with no prior aliases removes them without error' {
+  make_fake_eza
+
+  run_zsh_eza_shell '
+    source "${ZSH_EZA_REPO}/zsh-eza.plugin.zsh"
+    zsh-eza_plugin_unload
+    rc=$?
+    print -- "rc=${rc}"
+    if (( ! ${+aliases[ls]} )); then
+      print -- "ls=removed"
+    else
+      print -- "ls=still-present"
+    fi
+  '
+
+  assert $state equals 0
+  assert "$output" contains 'rc=0'
+  assert "$output" contains 'ls=removed'
+}
