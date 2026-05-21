@@ -36,7 +36,7 @@ the org-wide patterns in [z-shell/.github/PATTERNS.md](https://github.com/z-shel
 
 - 2-space indent, LF endings, UTF-8.
 - Every `.zsh` file starts with the standard modeline:
-  ```
+  ```zsh
   # -*- mode: zsh; sh-indentation: 2; indent-tabs-mode: nil; sh-basic-offset: 2; -*-
   # vim: ft=zsh sw=2 ts=2 et
   ```

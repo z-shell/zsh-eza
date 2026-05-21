@@ -33,6 +33,7 @@ docs/zsdoc/data
 # Zunit tests' output
 /tests/_output/*
 !/tests/_output/.gitkeep
+zunit.git/
 
 ### C
 # Prerequisites
