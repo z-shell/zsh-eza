@@ -33,7 +33,7 @@ jobs:
       - name: Check out code
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
       - name: Set up Zsh
-        uses: z-shell/.github/actions/setup-zsh@62b432bd1e71895def33d16166c90bc3131eaaaf # main
+        uses: z-shell/.github/actions/setup-zsh@2f42fb3d8d74582aa9dd99c884eda45078d95579 # main
       - name: Install git and curl
         run: sudo apt-get update && sudo apt-get install -yq git curl
       - name: Make vendored bin executable
