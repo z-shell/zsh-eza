@@ -27,9 +27,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out code
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v4
       - name: Set up Zsh
-        uses: z-shell/.github/actions/setup-zsh@62b432bd1e71895def33d16166c90bc3131eaaaf # main
+        uses: z-shell/.github/actions/setup-zsh@2f42fb3d8d74582aa9dd99c884eda45078d95579 # main
       - name: Check Zsh syntax
         run: |
           find . -type f \( -name '*.zsh' -o -path './functions/.*' \) -print | sort | while read -r file; do
