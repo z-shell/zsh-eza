@@ -140,8 +140,6 @@ zi light z-shell/zsh-eza
 
 ## Aliases
 
-<!-- Contract markers: | `ls` | | `l` | | `ll` | | `llm` | | `la` | | `lx` | | `lt` | | `tree` | -->
-
 | Alias  | Effective command                                            | Purpose                                                 |
 | ------ | ------------------------------------------------------------ | ------------------------------------------------------- |
 | `ls`   | `eza ${(@)eza_params}`                                       | List with the configured defaults.                      |
@@ -159,8 +157,9 @@ zi light z-shell/zsh-eza
 - If `eza` is missing, loading returns a nonzero status without exiting the
   current shell.
 - Existing aliases with the same names are saved before replacement.
-- With `AUTOCD=1`, the plugin registers `zsh-eza-auto-list` as a `chpwd` hook.
-- `zsh-eza_plugin_unload` removes the hook and plugin functions, unsets
+- With `AUTOCD=1`, the plugin registers a `chpwd` hook that lists the new
+  directory after `cd`.
+- `zsh-eza_plugin_unload` removes that hook and plugin functions, unsets
   plugin-owned state, and restores the aliases that existed before loading.
 
 ## Verification
