@@ -35,9 +35,7 @@
   </p>
 </div>
 
-![Screenshot showing `ll`, `ls`, `lx`, and `la` directory-listing examples](https://user-images.githubusercontent.com/59910950/165784269-3a8a8bfe-f291-4a33-aac9-1afa2b7b767f.png)
-
-> Screenshot is manually maintained pending Linear ZSH-18.
+![`zsh-eza` directory listing](https://user-images.githubusercontent.com/59910950/165784269-3a8a8bfe-f291-4a33-aac9-1afa2b7b767f.png)
 
 ## Features
 
@@ -47,7 +45,7 @@
 - Complete replacement or extension of the default `eza` arguments.
 - Optional automatic directory listing after `cd`.
 - Safe startup failure when `eza` is unavailable.
-- Reversible unload that restores aliases captured by the most recent load.
+- Reversible unload that restores aliases present before the plugin loaded.
 
 ## Requirements
 
@@ -158,13 +156,10 @@ zi light z-shell/zsh-eza
 - With `TERM=dumb`, the plugin returns successfully without defining aliases.
 - If `eza` is missing, loading returns a nonzero status without exiting the
   current shell.
-- Each load captures any existing aliases with the same names before
-  replacement.
-- With `AUTOCD=1`, the plugin registers a `chpwd` hook that lists the new
-  directory after `cd`.
-- `zsh-eza_plugin_unload` removes that hook and plugin functions, unsets
-  plugin-owned state, and restores the aliases captured by the most recent
-  load.
+- Existing aliases with the same names are saved before replacement.
+- With `AUTOCD=1`, the plugin registers `zsh-eza-auto-list` as a `chpwd` hook.
+- `zsh-eza_plugin_unload` removes the hook and plugin functions, removes
+  plugin-owned state, and restores the aliases that existed before loading.
 
 ## Verification
 
@@ -180,15 +175,14 @@ for tests.
 
 ## Documentation and support
 
-- [Z-Shell plugin gallery](https://wiki.zshell.dev/community/gallery/collection/plugins#sc-z-shellzsh-eza)
+- [Z-Shell plugin gallery](https://wiki.zshell.dev/community/gallery/collection/06_plugins#sc-z-shellzsh-eza)
 - [Zsh Plugin Standard](https://wiki.zshell.dev/community/zsh_plugin_standard)
 - [Report an issue](https://github.com/z-shell/zsh-eza/issues)
 
 ## Release model
 
 `zsh-eza` is consumed directly from Git. `main` is the stable branch and `next`
-is the development branch. Maintainers may create semantic version tags to mark
-milestones, but merges do not create a package release.
+is the development branch; merges do not create a package release.
 
 ## Contributing and license
 
