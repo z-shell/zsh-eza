@@ -35,7 +35,9 @@
   </p>
 </div>
 
-![`zsh-eza` directory listing](https://user-images.githubusercontent.com/59910950/165784269-3a8a8bfe-f291-4a33-aac9-1afa2b7b767f.png)
+![Screenshot showing `ll`, `ls`, `lx`, and `la` directory-listing examples](https://user-images.githubusercontent.com/59910950/165784269-3a8a8bfe-f291-4a33-aac9-1afa2b7b767f.png)
+
+> Screenshot is manually maintained pending Linear ZSH-18.
 
 ## Features
 
@@ -45,7 +47,7 @@
 - Complete replacement or extension of the default `eza` arguments.
 - Optional automatic directory listing after `cd`.
 - Safe startup failure when `eza` is unavailable.
-- Reversible unload that restores aliases present before the plugin loaded.
+- Reversible unload that restores aliases captured by the most recent load.
 
 ## Requirements
 
@@ -156,11 +158,13 @@ zi light z-shell/zsh-eza
 - With `TERM=dumb`, the plugin returns successfully without defining aliases.
 - If `eza` is missing, loading returns a nonzero status without exiting the
   current shell.
-- Existing aliases with the same names are saved before replacement.
+- Each load captures any existing aliases with the same names before
+  replacement.
 - With `AUTOCD=1`, the plugin registers a `chpwd` hook that lists the new
   directory after `cd`.
 - `zsh-eza_plugin_unload` removes that hook and plugin functions, unsets
-  plugin-owned state, and restores the aliases that existed before loading.
+  plugin-owned state, and restores the aliases captured by the most recent
+  load.
 
 ## Verification
 
