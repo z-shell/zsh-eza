@@ -180,7 +180,7 @@ for tests.
 
 ## Documentation and support
 
-- [Z-Shell plugin gallery](https://wiki.zshell.dev/community/gallery/collection/06_plugins#sc-z-shellzsh-eza)
+- [Z-Shell plugin gallery](https://wiki.zshell.dev/community/gallery/collection/plugins#sc-z-shellzsh-eza)
 - [Zsh Plugin Standard](https://wiki.zshell.dev/community/zsh_plugin_standard)
 - [Report an issue](https://github.com/z-shell/zsh-eza/issues)
 
