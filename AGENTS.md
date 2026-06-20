@@ -64,10 +64,10 @@ All tests use a fake `eza` stub. No real `eza` binary required.
 - [PATTERNS.md](https://github.com/z-shell/.github/blob/main/PATTERNS.md) — plugin entry-point idioms, fpath guard forms, unload contract
 - [z-shell/zsh-fancy-completions](https://github.com/z-shell/zsh-fancy-completions) — sibling plugin; use as consistency reference
 - [z-shell/zunit](https://github.com/z-shell/zunit) — test runner used by this repo
-- [Z-Shell Tracker](https://github.com/orgs/z-shell/projects) — track non-trivial deferred work here, not in local notes
+- [Linear Tracker](https://linear.app/ss-o/) — track non-trivial deferred work here, not in local notes
 
 ## Before starting non-trivial work
 
 1. Check open issues and PRs in this repo.
-2. Check the Z-Shell Tracker for related items.
+2. Check the Linear Tracker for related items.
 3. Leave an `Agent handoff` comment on the relevant issue when work is unfinished or blocked.
