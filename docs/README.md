@@ -35,7 +35,7 @@
   </p>
 </div>
 
-![`zsh-eza` directory listing](https://user-images.githubusercontent.com/59910950/165784269-3a8a8bfe-f291-4a33-aac9-1afa2b7b767f.png)
+![Screenshot showing `ll`, `ls`, `lx`, and `la` directory-listing examples](https://user-images.githubusercontent.com/59910950/165784269-3a8a8bfe-f291-4a33-aac9-1afa2b7b767f.png)
 
 ## Features
 
@@ -156,10 +156,11 @@ zi light z-shell/zsh-eza
 - With `TERM=dumb`, the plugin returns successfully without defining aliases.
 - If `eza` is missing, loading returns a nonzero status without exiting the
   current shell.
-- Existing aliases with the same names are saved before replacement.
+- Each load captures any existing aliases with the same names before
+  replacement.
 - With `AUTOCD=1`, the plugin registers `zsh-eza-auto-list` as a `chpwd` hook.
 - `zsh-eza_plugin_unload` removes the hook and plugin functions, removes
-  plugin-owned state, and restores the aliases that existed before loading.
+  plugin-owned state, and restores aliases captured by the most recent load.
 
 ## Verification
 
@@ -175,7 +176,7 @@ for tests.
 
 ## Documentation and support
 
-- [Z-Shell plugin gallery](https://wiki.zshell.dev/community/gallery/collection/06_plugins#sc-z-shellzsh-eza)
+- [Z-Shell plugin gallery](https://wiki.zshell.dev/community/gallery/collection/plugins#sc-z-shellzsh-eza)
 - [Zsh Plugin Standard](https://wiki.zshell.dev/community/zsh_plugin_standard)
 - [Report an issue](https://github.com/z-shell/zsh-eza/issues)
 
