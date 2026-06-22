@@ -29,7 +29,7 @@ jobs:
       - name: Check out code
         uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
       - name: Set up Zsh
-        uses: z-shell/.github/actions/setup-zsh@6ffb0d6a97ff44e47c3eb4b8ad372be6a71145a6 # main
+        uses: z-shell/.github/actions/setup-zsh@8ee041623cd5a2892887357ea9f0fb443ff3d2b4 # main
       - name: Check Zsh syntax
         run: |
           find . -type f \( -name '*.zsh' -o -path './functions/.*' \) -print | sort | while read -r file; do
