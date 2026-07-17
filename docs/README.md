@@ -1,53 +1,128 @@
 <div align="center">
-  <table style="width:100%;height:auto">
-    <tr><td align="center">
-  <h1>
-   <a title="❮ Zsh eza ❯" target="_self" href="https://github.com/z-shell/zsh-eza">
-  <img style="width:60px;height:60px"
-    src="https://raw.githubusercontent.com/z-shell/zi/main/docs/images/logo.svg"
-    alt="Logo" /></a>❮ Zsh eza ❯
-  </h1>
-  <h2>
-  Zsh plugin that replaces GNU <code>ls</code> aliases with <a target="_self" href="https://github.com/eza-community/eza">eza-community/eza</a>
-  </h2>
-<h3>
-  <a href="https://github.com/orgs/z-shell/discussions/">《❔》Ask a Question </a>
-  <a href="https://wiki.zshell.dev/search/">《💡》Search Wiki </a>
-  <a href="https://github.com/z-shell/community/issues/new?assignees=&labels=%F0%9F%91%A5+member&template=membership.yml&title=team%3A+">《💜》Join </a>
-  <a href="https://digitalclouds.crowdin.com/z-shell/">《🌐》Localize </a>
-</h3></td></tr>
-<tr>
-<td align="center">
-  <a target="_self" href="https://github.com/z-shell/zsh-eza/actions/workflows/trunk-check.yml">
-    <img align="center" src="https://github.com/z-shell/zsh-eza/actions/workflows/trunk-check.yml/badge.svg?branch=main" alt="⭕ Trunk Check" />
-  </a>
-  <a target="_self" href="https://open.vscode.dev/z-shell/zsh-eza/">
+  <a href="https://github.com/z-shell/zsh-eza">
     <img
-      align="center"
-      src="https://img.shields.io/badge/--007ACC?logo=visual%20studio%20code&logoColor=ffffff"
-      alt="Visual Studio Code"
+      src="https://raw.githubusercontent.com/z-shell/zi/main/docs/images/logo.svg"
+      alt="Z-Shell logo"
+      width="72"
+      height="72"
     />
   </a>
-</td>
-</tr>
-<tr><td><img align="center" style="width:100%;height:auto" src="https://user-images.githubusercontent.com/59910950/165784269-3a8a8bfe-f291-4a33-aac9-1afa2b7b767f.png" alt="zsh-eza screenshot" />
-</td></tr></table></div>
 
-## Default settings
+  <h1>Zsh eza</h1>
+  <p>
+    Zsh aliases and directory-listing behavior powered by
+    <a href="https://github.com/eza-community/eza">eza</a>.
+  </p>
+  <p>
+    <a href="https://github.com/z-shell/zsh-eza/actions/workflows/test-native.yml">
+      <img
+        src="https://github.com/z-shell/zsh-eza/actions/workflows/test-native.yml/badge.svg?branch=main"
+        alt="ZUnit status"
+      />
+    </a>
+    <a href="https://github.com/z-shell/zsh-eza/actions/workflows/trunk-check.yml">
+      <img
+        src="https://github.com/z-shell/zsh-eza/actions/workflows/trunk-check.yml/badge.svg?branch=main"
+        alt="Trunk Code Quality status"
+      />
+    </a>
+    <a href="../LICENSE">
+      <img
+        src="https://img.shields.io/github/license/z-shell/zsh-eza"
+        alt="License"
+      />
+    </a>
+  </p>
+</div>
 
-The plugin configures `ls`-style aliases for `eza`. Set `AUTOCD=1` before loading it to list directories automatically after `cd`.
+![Screenshot showing `ll`, `ls`, `lx`, and `la` directory-listing examples](https://user-images.githubusercontent.com/59910950/165784269-3a8a8bfe-f291-4a33-aac9-1afa2b7b767f.png)
 
-If `eza` is missing, the plugin prints an error and returns without terminating the current Zsh session.
+## Features
 
-### Variables
+- Eight `eza`-backed aliases for common list, long-list, and tree views.
+- Opinionated defaults for Git status, icons, groups, directory ordering,
+  timestamps, and color scales.
+- Complete replacement or extension of the default `eza` arguments.
+- Optional automatic directory listing after `cd`.
+- Safe startup failure when `eza` is unavailable.
+- Reversible unload that restores aliases present before the plugin loaded.
 
-| Variable           | Description                                                    | Default |
-| ------------------ | -------------------------------------------------------------- | ------- |
-| `eza_user_params`  | Replace the default `eza` argument list.                       | unset   |
-| `eza_extra_params` | Append additional `eza` arguments after the defaults.          | unset   |
-| `AUTOCD`           | Enable automatic directory listing after `cd` when set to `1`. | `0`     |
+## Requirements
 
-### Default parameters
+- Zsh
+- [`eza`](https://github.com/eza-community/eza) available on `PATH`
+
+Use the upstream
+[`eza` installation guide](https://github.com/eza-community/eza/blob/main/INSTALL.md)
+to install the executable for your platform.
+
+## Installation
+
+### Zi
+
+```zsh
+zi light z-shell/zsh-eza
+```
+
+To load only when `eza` exists and enable automatic listing after directory
+changes:
+
+```zsh
+zi ice has'eza' atinit'AUTOCD=1'
+zi light z-shell/zsh-eza
+```
+
+### Other plugin managers
+
+The plugin follows the
+[Zsh Plugin Standard](https://wiki.zshell.dev/community/zsh_plugin_standard)
+and can be sourced by other Zsh plugin managers.
+
+<details>
+<summary>Oh My Zsh custom plugin</summary>
+
+```sh
+git clone https://github.com/z-shell/zsh-eza \
+  "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-eza"
+```
+
+Add `zsh-eza` to the plugin list:
+
+```zsh
+plugins=(... zsh-eza)
+```
+
+</details>
+
+<details>
+<summary>Zplug</summary>
+
+```zsh
+zplug "z-shell/zsh-eza"
+```
+
+</details>
+
+<details>
+<summary>Antigen</summary>
+
+```zsh
+antigen bundle z-shell/zsh-eza@main
+```
+
+</details>
+
+## Configuration
+
+Set configuration before loading the plugin.
+
+| Variable           | Type        | Default | Effect                                           |
+| ------------------ | ----------- | ------- | ------------------------------------------------ |
+| `eza_user_params`  | Shell words | Unset   | Replaces the complete default argument list.     |
+| `eza_extra_params` | Shell words | Unset   | Appends arguments after the selected defaults.   |
+| `AUTOCD`           | Integer     | `0`     | Set to `1` to list the new directory after `cd`. |
+
+The default arguments are:
 
 ```zsh
 eza_params=(
@@ -56,81 +131,62 @@ eza_params=(
 )
 ```
 
-### Aliases
+For example:
 
 ```zsh
-alias ls='eza ${(@)eza_params}'
-alias l='eza --git-ignore ${(@)eza_params}'
-alias ll='eza --all --header --long ${(@)eza_params}'
-alias llm='eza --all --header --long --sort=modified ${(@)eza_params}'
-alias la='eza -lbhHigUmuSa'
-alias lx='eza -lbhHigUmuSa@'
-alias lt='eza --tree ${(@)eza_params}'
-alias tree='eza --tree ${(@)eza_params}'
-```
-
-## Install
-
-The `eza` should be present to use this plugin. Install `eza` with Zi:
-
-```zsh
-zi ice from'gh-r' as'program' sbin'**/eza -> eza' atclone'cp -vf completions/eza.zsh _eza'
-zi light eza-community/eza
-```
-
-### With [Zi](https://github.com/z-shell/zi)
-
-To install add to the `.zshrc` file:
-
-```zsh
+eza_extra_params='--classify --hyperlink=auto'
 zi light z-shell/zsh-eza
 ```
 
-Install only if eza exists and enable auto list directories:
+## Aliases
 
-```zsh
-zi ice has'eza' atinit'AUTOCD=1'
-zi light z-shell/zsh-eza
+| Alias  | Effective command                                            | Purpose                                                 |
+| ------ | ------------------------------------------------------------ | ------------------------------------------------------- |
+| `ls`   | `eza ${(@)eza_params}`                                       | List with the configured defaults.                      |
+| `l`    | `eza --git-ignore ${(@)eza_params}`                          | Hide Git-ignored entries.                               |
+| `ll`   | `eza --all --header --long ${(@)eza_params}`                 | Show a detailed list including hidden entries.          |
+| `llm`  | `eza --all --header --long --sort=modified ${(@)eza_params}` | Show a detailed list sorted by modification time.       |
+| `la`   | `eza -lbhHigUmuSa`                                           | Show an extended long listing.                          |
+| `lx`   | `eza -lbhHigUmuSa@`                                          | Show an extended long listing with extended attributes. |
+| `lt`   | `eza --tree ${(@)eza_params}`                                | Display a directory tree.                               |
+| `tree` | `eza --tree ${(@)eza_params}`                                | Display a directory tree.                               |
+
+## Lifecycle and side effects
+
+- With `TERM=dumb`, the plugin returns successfully without defining aliases.
+- If `eza` is missing, loading returns a nonzero status without exiting the
+  current shell.
+- Each load captures any existing aliases with the same names before
+  replacement.
+- With `AUTOCD=1`, the plugin registers `zsh-eza-auto-list` as a `chpwd` hook.
+- `zsh-eza_plugin_unload` removes the hook and plugin functions, removes
+  plugin-owned state, and restores aliases captured by the most recent load.
+
+## Verification
+
+The repository includes its ZUnit runner. From the repository root:
+
+```bash
+export ZSH_EZA_REPO="$PWD"
+PATH="$PWD/bin:$PATH" zunit --tap --verbose tests/zsh-eza.zunit
 ```
 
-Install only if eza exists and enable auto list directories in turbo mode:
+The suite uses a fake `eza` executable; a system installation is not required
+for tests.
 
-```zsh
-zi ice wait lucid has'eza' atinit'AUTOCD=1'
-zi light z-shell/zsh-eza
-```
+## Documentation and support
 
-Install only if eza exists and enable auto list directories in turbo mode with the for syntax:
+- [Z-Shell plugin gallery](https://wiki.zshell.dev/community/gallery/collection/plugins#sc-z-shellzsh-eza)
+- [Zsh Plugin Standard](https://wiki.zshell.dev/community/zsh_plugin_standard)
+- [Report an issue](https://github.com/z-shell/zsh-eza/issues)
 
-```zsh
-zi wait lucid for \
-  has'eza' atinit'AUTOCD=1' \
-    z-shell/zsh-eza
-```
+## Release model
 
-### With [Oh My Zsh](https://ohmyz.sh/)
+`zsh-eza` is consumed directly from Git. `main` is the stable branch and `next`
+is the development branch; merges do not create a package release.
 
-Clone the repository and add `zsh-eza` to the plugins array in your `.zshrc` file:
+## Contributing and license
 
-```sh
-git clone https://github.com/z-shell/zsh-eza \
-  ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-eza
-```
-
-```sh
-plugins=(... zsh-eza)
-```
-
-### With Zplug
-
-Add `zplug z-shell/zsh-eza` to your `~/.zshrc` and re-open your terminal session.
-
-### With [Antigen](https://github.com/zsh-users/antigen)
-
-Add to your `.zshrc` file:
-
-```sh
-antigen bundle z-shell/zsh-eza@main
-```
-
-Note: The `@main` branch suffix is required because this repository uses `main` as the default branch, while Antigen defaults to `master`.
+Contributions follow the
+[Z-Shell organization guidance](https://github.com/z-shell/.github).
+This project is distributed under the terms in [LICENSE](../LICENSE).
