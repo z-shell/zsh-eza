@@ -152,6 +152,34 @@
   assert "$output" contains 'fake-eza [--all] [--header] [--long] [--git]'
 }
 
+@test 'la alias prepends -lbhHigUmuSa before eza_params' {
+  make_fake_eza
+
+  run_zsh_eza_shell '
+    eza_extra_params="--extra-flag"
+    source "${ZSH_EZA_REPO}/zsh-eza.plugin.zsh"
+    eval "${aliases[la]}"
+  '
+
+  assert $state equals 0
+  assert "$output" contains 'fake-eza [-lbhHigUmuSa] [--git]'
+  assert "$output" contains '[--extra-flag]'
+}
+
+@test 'lx alias prepends -lbhHigUmuSa@ before eza_params' {
+  make_fake_eza
+
+  run_zsh_eza_shell '
+    eza_extra_params="--extra-flag"
+    source "${ZSH_EZA_REPO}/zsh-eza.plugin.zsh"
+    eval "${aliases[lx]}"
+  '
+
+  assert $state equals 0
+  assert "$output" contains 'fake-eza [-lbhHigUmuSa@] [--git]'
+  assert "$output" contains '[--extra-flag]'
+}
+
 @test 'eza_user_params replaces default params entirely' {
   make_fake_eza
 

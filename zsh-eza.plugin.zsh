@@ -22,12 +22,13 @@ autoload -Uz +X .zsh-eza
 
 # Load plugin
 (( ${+functions[.zsh-eza]} )) && {
-  .zsh-eza
-  typeset -i rc=$?
-  (( rc )) && {
-    print -u2 "Error loading zsh-eza plugin, exit code: ${rc}"
-    return ${rc}
-  }
+  () {
+    local -i rc
+    .zsh-eza
+    rc=$?
+    (( rc )) && print -u2 "Error loading zsh-eza plugin, exit code: ${rc}"
+    return $rc
+  } || return $?
 }
 
 # https://wiki.zshell.dev/community/zsh_plugin_standard#unload-function
