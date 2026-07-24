@@ -140,16 +140,16 @@ zi light z-shell/zsh-eza
 
 ## Aliases
 
-| Alias  | Effective command                                             | Purpose                                                  |
-| ------ | -------------------------------------------------------------- | --------------------------------------------------------- |
-| `ls`   | `eza ${(@)eza_params}`                                          | List with the configured defaults.                       |
-| `l`    | `eza --git-ignore ${(@)eza_params}`                             | Hide Git-ignored entries.                                |
-| `ll`   | `eza --all --header --long ${(@)eza_params}`                    | Show a detailed list including hidden entries.           |
-| `llm`  | `eza --all --header --long --sort=modified ${(@)eza_params}`    | Show a detailed list sorted by modification time.        |
-| `la`   | `eza -lbhHigUmuSa ${(@)eza_params}`                             | Show an extended long listing.                           |
-| `lx`   | `eza -lbhHigUmuSa@ ${(@)eza_params}`                            | Show an extended long listing with extended attributes.  |
-| `lt`   | `eza --tree ${(@)eza_params}`                                   | Display a directory tree.                                |
-| `tree` | `eza --tree ${(@)eza_params}`                                   | Display a directory tree.                                |
+| Alias  | Effective command                                            | Purpose                                                 |
+| ------ | ------------------------------------------------------------ | ------------------------------------------------------- |
+| `ls`   | `eza ${(@)eza_params}`                                       | List with the configured defaults.                      |
+| `l`    | `eza --git-ignore ${(@)eza_params}`                          | Hide Git-ignored entries.                               |
+| `ll`   | `eza --all --header --long ${(@)eza_params}`                 | Show a detailed list including hidden entries.          |
+| `llm`  | `eza --all --header --long --sort=modified ${(@)eza_params}` | Show a detailed list sorted by modification time.       |
+| `la`   | `eza -lbhHigUmuSa ${(@)eza_params}`                          | Show an extended long listing.                          |
+| `lx`   | `eza -lbhHigUmuSa@ ${(@)eza_params}`                         | Show an extended long listing with extended attributes. |
+| `lt`   | `eza --tree ${(@)eza_params}`                                | Display a directory tree.                               |
+| `tree` | `eza --tree ${(@)eza_params}`                                | Display a directory tree.                               |
 
 ## Lifecycle and side effects
 
