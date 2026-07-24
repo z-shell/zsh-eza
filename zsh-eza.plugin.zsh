@@ -49,7 +49,7 @@ zsh-eza_plugin_unload() {
     fi
   done
 
-  unset eza_params ZSH_EZA_ALIAS_NAMES ZSH_EZA_SAVED_ALIASES ZSH_EZA_FPATH 'Plugins[ZSH_EZA]'
+  unset eza_params ZSH_EZA_ALIAS_NAMES ZSH_EZA_SAVED_ALIASES ZSH_EZA_FPATH rc 'Plugins[ZSH_EZA]'
 
   unfunction zsh-eza_plugin_unload
 }
