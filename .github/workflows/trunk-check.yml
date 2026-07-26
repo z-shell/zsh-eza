@@ -26,6 +26,6 @@ jobs:
       actions: read
       checks: write
       contents: read
-    uses: z-shell/.github/.github/workflows/trunk.yml@8ea64af43d306521a6424c712a4af53631c683ca # main
+    uses: z-shell/.github/.github/workflows/trunk.yml@58b6ff6b4f23c57e18dea9c704fb023ed95f1458 # main
     with:
       arguments: --no-progress
