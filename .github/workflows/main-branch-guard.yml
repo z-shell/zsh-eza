@@ -21,7 +21,13 @@ jobs:
       - name: Verify pull request source branch
         env:
           HEAD_REF: ${{ github.head_ref }}
+          HEAD_REPOSITORY: ${{ github.event.pull_request.head.repo.full_name }}
+          REPOSITORY: ${{ github.repository }}
         run: |
+          if [[ "${HEAD_REPOSITORY}" != "${REPOSITORY}" ]]; then
+            echo "::error::Pull requests into main must come from this repository (got '${HEAD_REPOSITORY}')."
+            exit 1
+          fi
           if [[ "${HEAD_REF}" == "next" || "${HEAD_REF}" == hotfix-* ]]; then
             echo "Head branch '${HEAD_REF}' is allowed to target main."
             exit 0
