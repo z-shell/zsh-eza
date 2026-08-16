@@ -27,7 +27,7 @@ autoload -Uz +X .zsh-eza
     .zsh-eza
     rc=$?
     (( rc )) && print -u2 "Error loading zsh-eza plugin, exit code: ${rc}"
-    return $rc
+    return "$rc"
   } || return $?
 }
 
