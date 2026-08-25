@@ -5,5 +5,5 @@
     ":dependencyDashboardApproval",
     ":disableVulnerabilityAlerts"
   ],
-  "baseBranches": ["next"]
+  "baseBranchPatterns": ["next"]
 }
