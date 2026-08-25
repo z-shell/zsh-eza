@@ -30,6 +30,35 @@
   assert "$output" contains 'after-source'
 }
 
+@test 'isolated shell does not inherit unrelated environment variables' {
+  export ZSH_EZA_TEST_SENTINEL='zsh-eza-sensitive-sentinel'
+
+  run_zsh_eza_shell '
+    print -- "sentinel=${ZSH_EZA_TEST_SENTINEL-unset}"
+  '
+
+  unset ZSH_EZA_TEST_SENTINEL
+
+  assert $state equals 0
+  assert "$output" contains 'sentinel=unset'
+  assert "$output" does_not_contain 'zsh-eza-sensitive-sentinel'
+}
+
+@test 'helper fails clearly when zsh is not on PATH' {
+  local saved_path=$PATH
+  export ZSH_EZA_TEST_SENTINEL='zsh-eza-sensitive-sentinel'
+  PATH=$ZSH_EZA_TEST_EMPTY_PATH
+
+  run_zsh_eza_shell 'print -- "unexpected child execution"'
+
+  PATH=$saved_path
+  unset ZSH_EZA_TEST_SENTINEL
+
+  assert $state equals 127
+  assert "$output" contains 'zsh-eza test helper: zsh not found on PATH'
+  assert "$output" does_not_contain 'zsh-eza-sensitive-sentinel'
+}
+
 @test 'scalar custom params are split into separate eza arguments' {
   make_fake_eza
 
