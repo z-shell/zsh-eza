@@ -11,7 +11,11 @@ setup() {
   export ZSH_EZA_TEST_EMPTY_PATH="${ZSH_EZA_TEST_ROOT}/empty-bin"
 
   rm -rf "${ZSH_EZA_TEST_ROOT:?}"
-  mkdir -p "${ZSH_EZA_TEST_BIN}" "${ZSH_EZA_TEST_EMPTY_PATH}"
+  mkdir -p \
+    "${ZSH_EZA_TEST_BIN}" \
+    "${ZSH_EZA_TEST_EMPTY_PATH}" \
+    "${ZSH_EZA_TEST_ROOT}/home" \
+    "${ZSH_EZA_TEST_ROOT}/zdotdir"
 }
 
 teardown() {

@@ -14,15 +14,25 @@ EOF
   chmod u+x "${ZSH_EZA_TEST_BIN}/eza"
 }
 
-run_zsh_eza_shell() {
-  local script=$1
-  local path_value=${2:-${ZSH_EZA_TEST_BIN}:${PATH}}
+_run_zsh_eza_isolated_shell() {
+  builtin emulate -L zsh
+
+  local term=$1
+  local script=$2
+  local path_value=$3
   local shell_path
   shell_path="$(command -v zsh)"
 
-  run env \
+  if [[ -z $shell_path ]]; then
+    print -u2 -- 'zsh-eza test helper: zsh not found on PATH'
+    return 127
+  fi
+
+  command env -i \
+    HOME="${ZSH_EZA_TEST_ROOT}/home" \
+    ZDOTDIR="${ZSH_EZA_TEST_ROOT}/zdotdir" \
     NO_COLOR=1 \
-    TERM=xterm \
+    TERM="${term}" \
     PMSPEC='0uUpiPsX' \
     PATH="${path_value}" \
     ZSH_EZA_REPO="${ZSH_EZA_REPO}" \
@@ -30,18 +40,20 @@ run_zsh_eza_shell() {
     "${shell_path}" -fc 'eval "${ZSH_EZA_SCRIPT}"'
 }
 
-run_zsh_eza_dumb_shell() {
+run_zsh_eza_shell() {
+  builtin emulate -L zsh
+
   local script=$1
   local path_value=${2:-${ZSH_EZA_TEST_BIN}:${PATH}}
-  local shell_path
-  shell_path="$(command -v zsh)"
 
-  run env \
-    NO_COLOR=1 \
-    TERM=dumb \
-    PMSPEC='0uUpiPsX' \
-    PATH="${path_value}" \
-    ZSH_EZA_REPO="${ZSH_EZA_REPO}" \
-    ZSH_EZA_SCRIPT="${script}" \
-    "${shell_path}" -fc 'eval "${ZSH_EZA_SCRIPT}"'
+  run _run_zsh_eza_isolated_shell xterm "${script}" "${path_value}"
+}
+
+run_zsh_eza_dumb_shell() {
+  builtin emulate -L zsh
+
+  local script=$1
+  local path_value=${2:-${ZSH_EZA_TEST_BIN}:${PATH}}
+
+  run _run_zsh_eza_isolated_shell dumb "${script}" "${path_value}"
 }
