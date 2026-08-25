@@ -24,7 +24,7 @@ concurrency:
 jobs:
   zsh-lint:
     name: Zsh Lint
-    uses: z-shell/.github/.github/workflows/zsh-lint.yml@6dca2bef75c60106cde7237db5dea2c2eeed243b
+    uses: z-shell/.github/.github/workflows/zsh-lint.yml@4403e5a200c63596f641966dfb64e08a7a655ffa
     with:
       zsh-lint-ref: 3c4966b454fc07a346772a24d8311adab91414ed
       paths: |
