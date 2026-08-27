@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "project": {
+    "kind": "plugin",
+    "minimum_zsh": "5.9.2",
+    "function_namespaces": ["zsh-eza"]
+  },
+  "sources": [
+    { "root": "zsh-eza.plugin.zsh", "profile": "sourced-library" },
+    { "root": "functions", "profile": "autoload-function" }
+  ]
+}
