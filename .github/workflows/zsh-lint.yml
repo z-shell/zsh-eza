@@ -26,6 +26,6 @@ jobs:
     name: Zsh Lint
     uses: z-shell/.github/.github/workflows/zsh-lint.yml@1b790f9ac271fbec149f8c92cd9c4fb2e59cc6ac # zsh-lint/v1.0.0
     with:
-      zsh-lint-ref: 3c4966b454fc07a346772a24d8311adab91414ed
+      zsh-lint-ref: 900560008382fcdfbed9c2ff26129438d44a1359
       paths: |
         zsh-eza.plugin.zsh
