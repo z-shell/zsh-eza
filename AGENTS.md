@@ -21,7 +21,9 @@ A Zsh plugin that replaces GNU `ls` aliases with [`eza`](https://github.com/eza-
 - All new work branches from `next`.
 - Hotfixes branch from `main`.
 - Commit format: [Conventional Commits](https://www.conventionalcommits.org/) — see [decision 0003](https://github.com/z-shell/.github/blob/main/decisions/0003-conventional-commits.md).
-- **Never** include a `Co-authored-by` trailer (enforced by CI).
+- A `Co-authored-by` trailer may credit a real human, including the pull-request
+  author. Never credit a bot, AI agent, or automation as a co-author. Do not
+  claim CI enforcement unless a current repository caller or ruleset proves it.
 
 ## Plugin structure
 
@@ -34,12 +36,18 @@ A Zsh plugin that replaces GNU `ls` aliases with [`eza`](https://github.com/eza-
 | `tests/setup.zsh`     | ZUnit setup/teardown: tmp dir lifecycle                                      |
 | `docs/README.md`      | User-facing documentation                                                    |
 
-Plugin follows the [Z-Shell Plugin Standard](https://wiki.zshell.dev/community/zsh_plugin_standard):
+Review the plugin against the
+[Z-Shell Plugin Standard](https://wiki.zshell.dev/community/zsh_plugin_standard),
+while keeping portable behavior separate from optional manager profiles:
 
-- ZERO-handling `$0` resolution.
-- `Plugins[ZSH_EZA]` registration.
-- `PMSPEC`-aware fpath guard.
-- `zsh-eza_plugin_unload` reverses all side effects.
+- Portable loading accepts a manager-supplied `ZERO` and retains a direct-source
+  fallback. For self-location changes, follow the current organization Zsh
+  instruction and do not copy retired entry-point snippets from `PATTERNS.md`.
+- `Plugins[ZSH_EZA]` registration and the `PMSPEC` `f` capability guard are
+  optional manager integrations, not portable requirements or Zsh semantics.
+  Direct sourcing must continue to work without manager-provided state.
+- The repository declares an unload contract through `zsh-eza_plugin_unload`,
+  which reverses plugin-owned side effects.
 
 ## Public API
 
@@ -61,13 +69,18 @@ All tests use a fake `eza` stub. No real `eza` binary required.
 
 ## Key org cross-references
 
-- [PATTERNS.md](https://github.com/z-shell/.github/blob/main/PATTERNS.md) — plugin entry-point idioms, fpath guard forms, unload contract
+- [PATTERNS.md](https://github.com/z-shell/.github/blob/main/PATTERNS.md) -
+  retired entry-point examples and established cross-repository idioms; do not
+  copy retired snippets
 - [z-shell/zsh-fancy-completions](https://github.com/z-shell/zsh-fancy-completions) — sibling plugin; use as consistency reference
 - [z-shell/zunit](https://github.com/z-shell/zunit) — test runner used by this repo
-- [Linear Tracker](https://linear.app/ss-o/) — track non-trivial deferred work here, not in local notes
+- [GitHub issues](https://github.com/z-shell/zsh-eza/issues) and
+  [pull requests](https://github.com/z-shell/zsh-eza/pulls) - authoritative
+  records for active, blocked, and deferred work
 
 ## Before starting non-trivial work
 
 1. Check open issues and PRs in this repo.
-2. Check the Linear Tracker for related items.
+2. Treat any Project 28 item or Linear mirror only as a view of the owning
+   GitHub issue or pull request, not as a separate authority.
 3. Leave an `Agent handoff` comment on the relevant issue when work is unfinished or blocked.
