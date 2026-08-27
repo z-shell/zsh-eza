@@ -30,6 +30,24 @@
   assert "$output" contains 'after-source'
 }
 
+@test 'entrypoint preserves caller 0 and resolves its directory' {
+  make_fake_eza
+
+  local option_mode source_mode
+  for option_mode in default no_function_argzero posix_argzero; do
+    for source_mode in direct manager_zero; do
+      run_zsh_eza_entrypoint_state "$option_mode" "$source_mode"
+
+      assert $state equals 0
+      assert "$output" contains "mode=${option_mode}/${source_mode}"
+      assert "$output" contains 'rc=0'
+      assert "$output" contains 'caller-zero-preserved=yes'
+      assert "$output" contains "plugin-dir=${ZSH_EZA_REPO}"
+      assert "$output" contains 'resource-zero-preserved=yes'
+    done
+  done
+}
+
 @test 'isolated shell does not inherit unrelated environment variables' {
   export ZSH_EZA_TEST_SENTINEL='zsh-eza-sensitive-sentinel'
 
