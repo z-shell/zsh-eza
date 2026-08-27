@@ -57,3 +57,38 @@ run_zsh_eza_dumb_shell() {
 
   run _run_zsh_eza_isolated_shell dumb "${script}" "${path_value}"
 }
+
+run_zsh_eza_entrypoint_state() {
+  builtin emulate -L zsh
+
+  local option_mode=$1
+  local source_mode=$2
+  local option_command source_command
+
+  case $option_mode in
+    default) option_command=: ;;
+    no_function_argzero) option_command='unsetopt function_argzero' ;;
+    posix_argzero) option_command='setopt posix_argzero' ;;
+    *) return 2 ;;
+  esac
+
+  if [[ $source_mode == manager_zero ]]; then
+    source_command='ZERO=${ZSH_EZA_REPO}/zsh-eza.plugin.zsh'
+  else
+    source_command='unset ZERO'
+  fi
+
+  run_zsh_eza_shell "
+    ${option_command}
+    ${source_command}
+    caller_zero=\$0
+    source \"\${ZSH_EZA_REPO}/zsh-eza.plugin.zsh\"
+    rc=\$?
+    print -- \"mode=${option_mode}/${source_mode}\"
+    print -- \"rc=\${rc}\"
+    print -- \"caller-zero-preserved=\$([[ \$0 == \$caller_zero ]] && print yes || print no)\"
+    print -- \"plugin-dir=\${Plugins[ZSH_EZA]}\"
+    source \"\${ZSH_EZA_REPO}/zsh-eza.plugin.zsh\"
+    print -- \"resource-zero-preserved=\$([[ \$0 == \$caller_zero ]] && print yes || print no)\"
+  "
+}

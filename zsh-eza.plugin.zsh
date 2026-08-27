@@ -3,17 +3,19 @@
 #
 # Copyright (c) 2022 Salvydas Lukosius
 #
-# Zsh Plugin Standard
-# https://wiki.zshell.dev/community/zsh_plugin_standard#zero-handling
-0="${ZERO:-${${0:#$ZSH_ARGZERO}:-${(%):-%N}}}"
-0="${${(M)0:#/*}:-$PWD/$0}"
+# Preserve caller state while resolving this sourced entrypoint.
+() {
+  builtin emulate -L zsh
+
+  typeset -r source_path="${${(M)1:#/*}:-$PWD/$1}"
+  typeset -r plugin_dir=${source_path:h}
 
 # https://wiki.zshell.dev/community/zsh_plugin_standard#standard-plugins-hash
 typeset -gA Plugins
-Plugins[ZSH_EZA]="${0:h}"
+Plugins[ZSH_EZA]="$plugin_dir"
 
 # https://wiki.zshell.dev/community/zsh_plugin_standard#funtions-directory
-typeset -g ZSH_EZA_FPATH="${0:h}/functions"
+typeset -g ZSH_EZA_FPATH="${plugin_dir}/functions"
 if [[ $PMSPEC != *f* ]]; then
   fpath+=( "${ZSH_EZA_FPATH}" )
 fi
@@ -54,3 +56,4 @@ zsh-eza_plugin_unload() {
 
   unfunction zsh-eza_plugin_unload
 }
+} "${ZERO:-${${0:#$ZSH_ARGZERO}:-${(%):-%N}}}"
