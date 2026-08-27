@@ -7,11 +7,13 @@ on:
     paths:
       - "zsh-eza.plugin.zsh"
       - ".github/workflows/zsh-lint.yml"
+      - "zsh-lint.json"
   pull_request:
     branches: [next, main]
     paths:
       - "zsh-eza.plugin.zsh"
       - ".github/workflows/zsh-lint.yml"
+      - "zsh-lint.json"
   workflow_dispatch: {}
 
 permissions:
@@ -23,9 +25,35 @@ concurrency:
 
 jobs:
   zsh-lint:
-    name: Zsh Lint
-    uses: z-shell/.github/.github/workflows/zsh-lint.yml@1b790f9ac271fbec149f8c92cd9c4fb2e59cc6ac # zsh-lint/v1.0.0
-    with:
-      zsh-lint-ref: 900560008382fcdfbed9c2ff26129438d44a1359
-      paths: |
-        zsh-eza.plugin.zsh
+    name: Configured Zsh Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Check out zsh-lint
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: z-shell/zsh-lint
+          ref: 1e8b0a6c02d4aa433e6aee8ca141e11ef62ba76b
+          path: .zsh-lint-tool
+          persist-credentials: false
+      - name: Set up Go
+        uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
+        with:
+          cache: false
+          go-version: "1.25"
+      - name: Build zsh-lint
+        run: go build -C .zsh-lint-tool -o "$RUNNER_TEMP/zsh-lint" ./cmd/zsh-lint
+      - name: Run configured advisory profile
+        shell: bash
+        env:
+          ZSH_LINT_PATHS: |
+            zsh-eza.plugin.zsh
+        run: |
+          set -euo pipefail
+          mapfile -t targets < <(printf '%s\n' "$ZSH_LINT_PATHS" | sed '/^[[:space:]]*$/d')
+          find -- "${targets[@]}" -type f -print0 | sort -z > "$RUNNER_TEMP/zsh-lint-files"
+          mapfile -d '' files < "$RUNNER_TEMP/zsh-lint-files"
+          "$RUNNER_TEMP/zsh-lint" --config zsh-lint.json "${files[@]}"
