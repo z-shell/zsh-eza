@@ -3,19 +3,9 @@ name: "ZUnit (native)"
 
 on:
   push:
-    branches: [next, main]
-    paths:
-      - ".github/workflows/test-native.yml"
-      - "tests/**"
-      - "functions/.zsh-eza"
-      - "zsh-eza.plugin.zsh"
+    branches: [main]
   pull_request:
-    branches: [next, main]
-    paths:
-      - ".github/workflows/test-native.yml"
-      - "tests/**"
-      - "functions/.zsh-eza"
-      - "zsh-eza.plugin.zsh"
+    branches: [main]
   workflow_dispatch: {}
 
 permissions:

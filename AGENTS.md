@@ -9,18 +9,18 @@ A Zsh plugin that replaces GNU `ls` aliases with [`eza`](https://github.com/eza-
 
 ## Release model
 
-**Class 3 — git-consumed source.** Do not add release automation.
+**Class 3 - git-consumed source.** Do not add release automation.
 
-- Development: `next` branch.
-- Production: `main` branch.
+- Development and stable consumable branch: `main`.
 - Releases: push a semver tag manually if a milestone needs marking.
 - Reference: [org release runbook](https://github.com/z-shell/.github/blob/main/runbooks/release.md).
 
 ## Branching and commits
 
-- All new work branches from `next`.
-- Hotfixes branch from `main`.
-- Commit format: [Conventional Commits](https://www.conventionalcommits.org/) — see [decision 0003](https://github.com/z-shell/.github/blob/main/decisions/0003-conventional-commits.md).
+- All work branches from `main`, and pull requests target `main`.
+- Use `feature-<id>`, `bug-<id>`, or `hotfix-<id>` branch names.
+- Commit format: [Conventional Commits](https://www.conventionalcommits.org/); see [decision 0003](https://github.com/z-shell/.github/blob/main/decisions/0003-conventional-commits.md).
+- Branch model: [decision 0019](https://github.com/z-shell/.github/blob/main/decisions/0019-trunk-on-main-default.md).
 - A `Co-authored-by` trailer may credit a real human, including the pull-request
   author. Never credit a bot, AI agent, or automation as a co-author. Do not
   claim CI enforcement unless a current repository caller or ruleset proves it.

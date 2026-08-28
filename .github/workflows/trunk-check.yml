@@ -3,10 +3,10 @@ name: Trunk Code Quality
 
 on:
   push:
-    branches: [next, main]
+    branches: [main]
     tags: ["v*.*.*"]
   pull_request:
-    branches: [next, main]
+    branches: [main]
     types: [opened, synchronize, reopened]
   schedule:
     - cron: "0 05 * * 5"

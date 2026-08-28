@@ -3,17 +3,9 @@ name: Zsh Lint
 
 on:
   push:
-    branches: [next, main]
-    paths:
-      - "zsh-eza.plugin.zsh"
-      - ".github/workflows/zsh-lint.yml"
-      - "zsh-lint.json"
+    branches: [main]
   pull_request:
-    branches: [next, main]
-    paths:
-      - "zsh-eza.plugin.zsh"
-      - ".github/workflows/zsh-lint.yml"
-      - "zsh-lint.json"
+    branches: [main]
   workflow_dispatch: {}
 
 permissions:

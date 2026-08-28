@@ -182,8 +182,10 @@ for tests.
 
 ## Release model
 
-`zsh-eza` is consumed directly from Git. `main` is the stable branch and `next`
-is the development branch; merges do not create a package release.
+`zsh-eza` is consumed directly from Git and uses trunk-based development on
+`main`. Create `feature-<id>`, `bug-<id>`, or `hotfix-<id>` branches from
+`main` and target pull requests back to `main`. Merges do not create a package
+release.
 
 ## Contributing and license
 
