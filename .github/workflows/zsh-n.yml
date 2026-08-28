@@ -3,15 +3,9 @@ name: Zsh Syntax Check
 
 on:
   push:
-    branches: [next, main]
-    paths:
-      - "*.zsh"
-      - "functions/.*"
+    branches: [main]
   pull_request:
-    branches: [next, main]
-    paths:
-      - "*.zsh"
-      - "functions/.*"
+    branches: [main]
   workflow_dispatch: {}
 
 permissions:

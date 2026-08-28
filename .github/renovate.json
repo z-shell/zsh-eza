@@ -4,6 +4,5 @@
     "local>z-shell/.github:renovate-config",
     ":dependencyDashboardApproval",
     ":disableVulnerabilityAlerts"
-  ],
-  "baseBranchPatterns": ["next"]
+  ]
 }
