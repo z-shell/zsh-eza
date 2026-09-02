@@ -165,6 +165,8 @@ zi light z-shell/zsh-eza
 - With `AUTOCD=1`, the plugin registers `zsh-eza-auto-list` as a `chpwd` hook.
 - `zsh-eza_plugin_unload` removes the hook and plugin functions, removes
   plugin-owned state, and restores aliases captured by the most recent load.
+  An alias changed after the plugin loaded is treated as user-owned and is
+  left untouched.
 
 ## Verification
 

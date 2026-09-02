@@ -52,30 +52,22 @@
     add-zsh-hook -d chpwd _zsh_eza_auto_list 2>/dev/null
     unfunction zsh-eza-auto-list _zsh_eza_auto_list _zsh_eza_init .zsh-eza 2>/dev/null
 
+    # Ownership-aware restoration: an alias the user changed after load is
+    # theirs, so leave it alone. Only a value this plugin still owns is undone.
     local alias_name
-    local -a alias_names=( ls l ll llm la lx lt tree )
-    if (( ${+parameters[_zsh_eza_alias_names]} )); then
-      alias_names=( "${_zsh_eza_alias_names[@]}" )
-    elif (( ${+parameters[ZSH_EZA_ALIAS_NAMES]} )); then
-      alias_names=( "${ZSH_EZA_ALIAS_NAMES[@]}" )
-    fi
+    for alias_name in "${(k)_zsh_eza_installed_aliases[@]}"; do
+      [[ ${aliases[$alias_name]-} == "${_zsh_eza_installed_aliases[$alias_name]}" ]] || continue
 
-    for alias_name in "${alias_names[@]}"; do
-      # Ownership-aware restoration: restore only if still defined
-      if (( ${+aliases[$alias_name]} )); then
-        builtin unalias "${alias_name}" 2>/dev/null
-      fi
-
-      if (( ${+parameters[_zsh_eza_saved_aliases]} )) && (( ${+_zsh_eza_saved_aliases[$alias_name]} )); then
+      if (( ${+_zsh_eza_saved_aliases[$alias_name]} )); then
         aliases[$alias_name]="${_zsh_eza_saved_aliases[$alias_name]}"
-      elif (( ${+parameters[ZSH_EZA_SAVED_ALIASES]} )) && (( ${+ZSH_EZA_SAVED_ALIASES[$alias_name]} )); then
-        aliases[$alias_name]="${ZSH_EZA_SAVED_ALIASES[$alias_name]}"
+      else
+        builtin unalias "${alias_name}" 2>/dev/null
       fi
     done
 
     unset eza_params _zsh_eza_params ZSH_EZA_ALIAS_NAMES _zsh_eza_alias_names \
-          ZSH_EZA_SAVED_ALIASES _zsh_eza_saved_aliases ZSH_EZA_FPATH _zsh_eza_fpath \
-          _zsh_eza_plugin_dir
+          ZSH_EZA_SAVED_ALIASES _zsh_eza_saved_aliases _zsh_eza_installed_aliases \
+          ZSH_EZA_FPATH _zsh_eza_fpath _zsh_eza_plugin_dir
 
     unfunction zsh-eza_plugin_unload
   }

@@ -19,6 +19,7 @@ fi
 typeset -ga eza_params _zsh_eza_params
 typeset -ga ZSH_EZA_ALIAS_NAMES _zsh_eza_alias_names
 typeset -gA ZSH_EZA_SAVED_ALIASES _zsh_eza_saved_aliases
+typeset -gA _zsh_eza_installed_aliases
 
 _zsh_eza_params=(
   '--git' '--icons' '--group' '--group-directories-first'
@@ -65,6 +66,13 @@ builtin alias la='eza -lbhHigUmuSa ${(@)eza_params}'
 builtin alias lx='eza -lbhHigUmuSa@ ${(@)eza_params}'
 builtin alias lt='eza --tree ${(@)eza_params}'
 builtin alias tree='eza --tree ${(@)eza_params}'
+
+# Record what this load installed so unload can tell its own value from a
+# later user change. See the unload contract in zsh-eza.plugin.zsh.
+_zsh_eza_installed_aliases=()
+for alias_name in "${_zsh_eza_alias_names[@]}"; do
+  _zsh_eza_installed_aliases[$alias_name]="${aliases[$alias_name]}"
+done
 
 local is_autocd=0
 if zstyle -t ':zsh-eza:config' autocd; then
