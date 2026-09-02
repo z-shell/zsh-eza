@@ -335,11 +335,14 @@
     else
       print -- "ls=aliased"
     fi
+    zsh-eza_plugin_unload
+    print -- "unload-rc=$?"
   '
 
   assert $state equals 0
   assert "$output" contains 'rc=0'
   assert "$output" contains 'ls=not-aliased'
+  assert "$output" contains 'unload-rc=0'
 }
 
 @test 'unload with no prior aliases removes them without error' {

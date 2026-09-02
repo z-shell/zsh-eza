@@ -50,7 +50,10 @@
     # Ownership-aware restoration: an alias the user changed after load is
     # theirs, so leave it alone. Only a value this plugin still owns is undone.
     local alias_name
-    for alias_name in "${(k)_zsh_eza_installed_aliases[@]}"; do
+    # Unquoted on purpose: a quoted key expansion of an unset hash yields one
+    # empty word, which a load that returned early (dumb terminal, missing eza)
+    # would then feed back as a subscript. The keys are plugin-owned literals.
+    for alias_name in ${(k)_zsh_eza_installed_aliases}; do
       [[ ${aliases[$alias_name]-} == "${_zsh_eza_installed_aliases[$alias_name]}" ]] || continue
 
       if (( ${+_zsh_eza_saved_aliases[$alias_name]} )); then
