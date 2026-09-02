@@ -410,3 +410,36 @@
   assert "$output" contains 'ls=my-own-ls'
   assert "$output" contains 'll=removed'
 }
+
+@test 'explicit zstyle autocd no wins over legacy AUTOCD=1' {
+  make_fake_eza
+
+  run_zsh_eza_shell '
+    zstyle ":zsh-eza:config" autocd no
+    AUTOCD=1
+    source "${ZSH_EZA_REPO}/zsh-eza.plugin.zsh"
+    if [[ ${chpwd_functions[(r)_zsh_eza_auto_list]} == _zsh_eza_auto_list ]]; then
+      print -- "hook=registered"
+    else
+      print -- "hook=absent"
+    fi
+  '
+
+  assert $state equals 0
+  assert "$output" contains 'hook=absent'
+}
+
+@test 'explicit empty zstyle user-params wins over legacy eza_user_params' {
+  make_fake_eza
+
+  run_zsh_eza_shell '
+    zstyle ":zsh-eza:config" user-params ""
+    eza_user_params="--tree"
+    source "${ZSH_EZA_REPO}/zsh-eza.plugin.zsh"
+    eval "${aliases[ls]}"
+  '
+
+  assert $state equals 0
+  assert "$output" contains 'fake-eza'
+  assert "$output" does_not_contain '[--tree]'
+}

@@ -26,18 +26,17 @@ _zsh_eza_params=(
   '--time-style=long-iso' '--color-scale=all'
 )
 
-# Read declarative zstyle configuration with fallback to legacy global variables
+# Read declarative zstyle configuration with fallback to legacy global
+# variables. A style that is set wins even when its value is empty or false;
+# the legacy parameter is consulted only when no style is set at all.
 local style_user_params style_extra_params
-zstyle -s ':zsh-eza:config' user-params style_user_params
-zstyle -s ':zsh-eza:config' extra-params style_extra_params
-
-if [[ -n $style_user_params ]]; then
+if zstyle -s ':zsh-eza:config' user-params style_user_params; then
   _zsh_eza_params=( ${(z)style_user_params} )
 elif [[ -n ${eza_user_params-} ]]; then
   _zsh_eza_params=( ${(z)eza_user_params} )
 fi
 
-if [[ -n $style_extra_params ]]; then
+if zstyle -s ':zsh-eza:config' extra-params style_extra_params; then
   _zsh_eza_params+=( ${(z)style_extra_params} )
 elif [[ -n ${eza_extra_params-} ]]; then
   _zsh_eza_params+=( ${(z)eza_extra_params} )
@@ -74,9 +73,9 @@ for alias_name in "${_zsh_eza_alias_names[@]}"; do
   _zsh_eza_installed_aliases[$alias_name]="${aliases[$alias_name]}"
 done
 
-local is_autocd=0
-if zstyle -t ':zsh-eza:config' autocd; then
-  is_autocd=1
+local is_autocd=0 style_autocd
+if zstyle -s ':zsh-eza:config' autocd style_autocd; then
+  [[ $style_autocd == (yes|true|on|1) ]] && is_autocd=1
 elif (( ${AUTOCD:-0} == 1 )); then
   is_autocd=1
 fi
