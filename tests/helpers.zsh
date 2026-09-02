@@ -89,7 +89,7 @@ run_zsh_eza_entrypoint_state() {
     print -- \"mode=${option_mode}/${source_mode}\"
     print -- \"rc=\${rc}\"
     print -- \"caller-zero-preserved=\$([[ \$0 == \$caller_zero ]] && print yes || print no)\"
-    print -- \"plugin-dir=\${_zsh_eza_plugin_dir:-\${Plugins[ZSH_EZA]}}\"
+    print -- \"plugin-dir=\${_zsh_eza_plugin_dir}\"
     source \"\${ZSH_EZA_REPO}/zsh-eza.plugin.zsh\"
     print -- \"resource-zero-preserved=\$([[ \$0 == \$caller_zero ]] && print yes || print no)\"
   "

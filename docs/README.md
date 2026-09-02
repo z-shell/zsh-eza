@@ -68,7 +68,8 @@ To load only when `eza` exists and enable automatic listing after directory
 changes:
 
 ```zsh
-zi ice has'eza' atinit'AUTOCD=1'
+zstyle ':zsh-eza:config' autocd yes
+zi ice has'eza'
 zi light z-shell/zsh-eza
 ```
 
@@ -122,8 +123,11 @@ Set configuration before loading the plugin using standard `zstyle` contexts.
 | `:zsh-eza:config` | `extra-params` | Shell words | Unset   | Appends arguments after the selected defaults.     |
 | `:zsh-eza:config` | `autocd`       | Boolean     | `no`    | Set to `yes` to list the new directory after `cd`. |
 
-> [!NOTE]
-> Legacy global parameters (`eza_user_params`, `eza_extra_params`, `AUTOCD`) remain supported for backward compatibility.
+> [!IMPORTANT]
+> The global parameters `eza_user_params`, `eza_extra_params` and `AUTOCD` were
+> removed. Replace them with the `:zsh-eza:config` styles above. The parameter
+> holding the resolved arguments is now `_zsh_eza_params`; it is private state,
+> not a configuration entry point.
 
 The default arguments are:
 
@@ -144,16 +148,16 @@ zi light z-shell/zsh-eza
 
 ## Aliases
 
-| Alias  | Effective command                                            | Purpose                                                 |
-| ------ | ------------------------------------------------------------ | ------------------------------------------------------- |
-| `ls`   | `eza ${(@)eza_params}`                                       | List with the configured defaults.                      |
-| `l`    | `eza --git-ignore ${(@)eza_params}`                          | Hide Git-ignored entries.                               |
-| `ll`   | `eza --all --header --long ${(@)eza_params}`                 | Show a detailed list including hidden entries.          |
-| `llm`  | `eza --all --header --long --sort=modified ${(@)eza_params}` | Show a detailed list sorted by modification time.       |
-| `la`   | `eza -lbhHigUmuSa ${(@)eza_params}`                          | Show an extended long listing.                          |
-| `lx`   | `eza -lbhHigUmuSa@ ${(@)eza_params}`                         | Show an extended long listing with extended attributes. |
-| `lt`   | `eza --tree ${(@)eza_params}`                                | Display a directory tree.                               |
-| `tree` | `eza --tree ${(@)eza_params}`                                | Display a directory tree.                               |
+| Alias  | Effective command                                                 | Purpose                                                 |
+| ------ | ----------------------------------------------------------------- | ------------------------------------------------------- |
+| `ls`   | `eza ${(@)_zsh_eza_params}`                                       | List with the configured defaults.                      |
+| `l`    | `eza --git-ignore ${(@)_zsh_eza_params}`                          | Hide Git-ignored entries.                               |
+| `ll`   | `eza --all --header --long ${(@)_zsh_eza_params}`                 | Show a detailed list including hidden entries.          |
+| `llm`  | `eza --all --header --long --sort=modified ${(@)_zsh_eza_params}` | Show a detailed list sorted by modification time.       |
+| `la`   | `eza -lbhHigUmuSa ${(@)_zsh_eza_params}`                          | Show an extended long listing.                          |
+| `lx`   | `eza -lbhHigUmuSa@ ${(@)_zsh_eza_params}`                         | Show an extended long listing with extended attributes. |
+| `lt`   | `eza --tree ${(@)_zsh_eza_params}`                                | Display a directory tree.                               |
+| `tree` | `eza --tree ${(@)_zsh_eza_params}`                                | Display a directory tree.                               |
 
 ## Lifecycle and side effects
 
@@ -162,7 +166,8 @@ zi light z-shell/zsh-eza
   current shell.
 - Each load captures any existing aliases with the same names before
   replacement.
-- With `AUTOCD=1`, the plugin registers `zsh-eza-auto-list` as a `chpwd` hook.
+- With `autocd` set to a true value, the plugin registers `_zsh_eza_auto_list`
+  as a `chpwd` hook.
 - `zsh-eza_plugin_unload` removes the hook and plugin functions, removes
   plugin-owned state, and restores aliases captured by the most recent load.
   An alias changed after the plugin loaded is treated as user-owned and is

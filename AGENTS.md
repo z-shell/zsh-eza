@@ -30,7 +30,7 @@ A Zsh plugin that replaces GNU `ls` aliases with [`eza`](https://github.com/eza-
 | Path                      | Purpose                                                                      |
 | ------------------------- | ---------------------------------------------------------------------------- |
 | `zsh-eza.plugin.zsh`      | Entry point sourced by plugin manager                                        |
-| `functions/_zsh_eza_init` | Plugin logic: guards, params, aliases, AUTOCD hook                           |
+| `functions/_zsh_eza_init` | Plugin logic: guards, params, aliases, autocd hook                           |
 | `tests/zsh-eza.zunit`     | ZUnit test suite                                                             |
 | `tests/helpers.zsh`       | Test helpers: `make_fake_eza`, `run_zsh_eza_shell`, `run_zsh_eza_dumb_shell` |
 | `tests/setup.zsh`         | ZUnit setup/teardown: tmp dir lifecycle                                      |
@@ -51,11 +51,16 @@ while keeping portable behavior separate from optional manager profiles:
 
 ## Public API
 
-| Variable           | Effect                                                           |
-| ------------------ | ---------------------------------------------------------------- |
-| `eza_user_params`  | Replaces the default `eza_params` array entirely                 |
-| `eza_extra_params` | Appended to `eza_params`                                         |
-| `AUTOCD=1`         | Registers a `chpwd` hook that lists the new directory after `cd` |
+All public configuration goes through the `:zsh-eza:config` `zstyle` context.
+
+| Style          | Effect                                                           |
+| -------------- | ---------------------------------------------------------------- |
+| `user-params`  | Replaces the default `_zsh_eza_params` array entirely            |
+| `extra-params` | Appended to `_zsh_eza_params`                                    |
+| `autocd`       | Registers a `chpwd` hook that lists the new directory after `cd` |
+
+`_zsh_eza_params`, `_zsh_eza_saved_aliases`, `_zsh_eza_installed_aliases`,
+`_zsh_eza_fpath` and `_zsh_eza_plugin_dir` are private runtime state.
 
 ## Running tests
 

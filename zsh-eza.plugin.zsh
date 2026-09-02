@@ -41,16 +41,11 @@
     builtin emulate -L zsh
 
     # Restore fpath
-    local plugin_functions="${_zsh_eza_fpath:-${_zsh_eza_plugin_dir}/functions}"
-    fpath=( "${fpath[@]:#${plugin_functions}}" )
-    if (( ${+parameters[ZSH_EZA_FPATH]} )); then
-      fpath=( "${fpath[@]:#${ZSH_EZA_FPATH}}" )
-    fi
+    fpath=( "${fpath[@]:#${_zsh_eza_fpath:-${_zsh_eza_plugin_dir}/functions}}" )
 
     autoload -Uz add-zsh-hook
-    add-zsh-hook -d chpwd zsh-eza-auto-list 2>/dev/null
     add-zsh-hook -d chpwd _zsh_eza_auto_list 2>/dev/null
-    unfunction zsh-eza-auto-list _zsh_eza_auto_list _zsh_eza_init .zsh-eza 2>/dev/null
+    unfunction _zsh_eza_auto_list _zsh_eza_init 2>/dev/null
 
     # Ownership-aware restoration: an alias the user changed after load is
     # theirs, so leave it alone. Only a value this plugin still owns is undone.
@@ -65,9 +60,8 @@
       fi
     done
 
-    unset eza_params _zsh_eza_params ZSH_EZA_ALIAS_NAMES _zsh_eza_alias_names \
-          ZSH_EZA_SAVED_ALIASES _zsh_eza_saved_aliases _zsh_eza_installed_aliases \
-          ZSH_EZA_FPATH _zsh_eza_fpath _zsh_eza_plugin_dir
+    unset _zsh_eza_params _zsh_eza_saved_aliases _zsh_eza_installed_aliases \
+          _zsh_eza_fpath _zsh_eza_plugin_dir
 
     unfunction zsh-eza_plugin_unload
   }
