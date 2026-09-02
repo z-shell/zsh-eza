@@ -46,7 +46,7 @@ while keeping portable behavior separate from optional manager profiles:
 - `PMSPEC` `f` capability guard is an optional manager integration, not a
   portable requirement or Zsh semantics. Direct sourcing must continue to work
   without manager-provided state.
-- The repository declares an unload contract through `zsh_eza_plugin_unload`,
+- The repository declares an unload contract through `zsh-eza_plugin_unload`,
   which reverses plugin-owned side effects.
 
 ## Public API

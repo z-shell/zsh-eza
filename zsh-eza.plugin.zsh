@@ -34,7 +34,10 @@
   fi
 
   # https://wiki.zshell.dev/community/zsh_plugin_standard#unload-function
-  zsh_eza_plugin_unload() {
+  # Zi dispatches ${plugin}_plugin_unload using the literal plugin name, so the
+  # hyphen is required for `zi unload z-shell/zsh-eza` to reach this function.
+  # zsh-lint disable=plugin/function-namespace -- Zi dispatches ${plugin}_plugin_unload verbatim
+  zsh-eza_plugin_unload() {
     builtin emulate -L zsh
 
     # Restore fpath
@@ -74,6 +77,6 @@
           ZSH_EZA_SAVED_ALIASES _zsh_eza_saved_aliases ZSH_EZA_FPATH _zsh_eza_fpath \
           _zsh_eza_plugin_dir
 
-    unfunction zsh_eza_plugin_unload
+    unfunction zsh-eza_plugin_unload
   }
 } "${ZERO:-${${0:#$ZSH_ARGZERO}:-${(%):-%N}}}"

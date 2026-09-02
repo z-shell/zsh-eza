@@ -104,7 +104,7 @@
       print -- "hook=present"
     fi
 
-    zsh_eza_plugin_unload
+    zsh-eza_plugin_unload
     print -- "restored=${aliases[ls]}"
 
     if (( ${+functions[zsh-eza-auto-list]} )); then
@@ -348,7 +348,7 @@
 
   run_zsh_eza_shell '
     source "${ZSH_EZA_REPO}/zsh-eza.plugin.zsh"
-    zsh_eza_plugin_unload
+    zsh-eza_plugin_unload
     rc=$?
     print -- "rc=${rc}"
     if (( ! ${+aliases[ls]} )); then
@@ -393,22 +393,3 @@
   assert $state equals 0
   assert "$output" contains 'hook=registered'
 }
-
-@test 'zsh_eza_plugin_unload standard entrypoint unloads cleanly' {
-  make_fake_eza
-
-  run_zsh_eza_shell '
-    source "${ZSH_EZA_REPO}/zsh-eza.plugin.zsh"
-    zsh_eza_plugin_unload
-    rc=$?
-    print -- "rc=${rc}"
-    if (( ! ${+aliases[ls]} )); then
-      print -- "ls=removed"
-    fi
-  '
-
-  assert $state equals 0
-  assert "$output" contains 'rc=0'
-  assert "$output" contains 'ls=removed'
-}
-
