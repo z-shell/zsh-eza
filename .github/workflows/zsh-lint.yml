@@ -28,7 +28,7 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: z-shell/zsh-lint
-          ref: 1e8b0a6c02d4aa433e6aee8ca141e11ef62ba76b
+          ref: 33bce8041faa1395455562c5a558a063ccdcc441 # v1.2.0
           path: .zsh-lint-tool
           persist-credentials: false
       - name: Set up Go
@@ -43,6 +43,9 @@ jobs:
         env:
           ZSH_LINT_PATHS: |
             zsh-eza.plugin.zsh
+            functions
+            tests/helpers.zsh
+            tests/setup.zsh
         run: |
           set -euo pipefail
           mapfile -t targets < <(printf '%s\n' "$ZSH_LINT_PATHS" | sed '/^[[:space:]]*$/d')

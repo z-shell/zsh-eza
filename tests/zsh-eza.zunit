@@ -81,8 +81,8 @@
   make_fake_eza
 
   run_zsh_eza_shell '
-    eza_user_params="--git --icons"
-    eza_extra_params="--classify --tree"
+    zstyle ":zsh-eza:config" user-params "--git --icons"
+    zstyle ":zsh-eza:config" extra-params "--classify --tree"
     source "${ZSH_EZA_REPO}/zsh-eza.plugin.zsh"
     eval "${aliases[ls]}"
   '
@@ -91,29 +91,29 @@
   assert "$output" contains 'fake-eza [--git] [--icons] [--classify] [--tree]'
 }
 
-@test 'unload restores aliases and removes the AUTOCD hook' {
+@test 'unload restores aliases and removes the autocd hook' {
   make_fake_eza
 
   run_zsh_eza_shell '
     alias ls="ls --color=auto"
-    AUTOCD=1
+    zstyle ":zsh-eza:config" autocd yes
     source "${ZSH_EZA_REPO}/zsh-eza.plugin.zsh"
     print -- "loaded=${aliases[ls]}"
 
-    if [[ ${chpwd_functions[(r)zsh-eza-auto-list]} == zsh-eza-auto-list ]]; then
+    if [[ ${chpwd_functions[(r)_zsh_eza_auto_list]} == _zsh_eza_auto_list ]]; then
       print -- "hook=present"
     fi
 
     zsh-eza_plugin_unload
     print -- "restored=${aliases[ls]}"
 
-    if (( ${+functions[zsh-eza-auto-list]} )); then
+    if (( ${+functions[_zsh_eza_auto_list]} )); then
       print -- "hook-function=present"
     else
       print -- "hook-function=removed"
     fi
 
-    if [[ ${chpwd_functions[(r)zsh-eza-auto-list]} == zsh-eza-auto-list ]]; then
+    if [[ ${chpwd_functions[(r)_zsh_eza_auto_list]} == _zsh_eza_auto_list ]]; then
       print -- "hook-entry=present"
     else
       print -- "hook-entry=removed"
@@ -121,19 +121,19 @@
   '
 
   assert $state equals 0
-  assert "$output" contains 'loaded=eza ${(@)eza_params}'
+  assert "$output" contains 'loaded=eza ${(@)_zsh_eza_params}'
   assert "$output" contains 'hook=present'
   assert "$output" contains 'restored=ls --color=auto'
   assert "$output" contains 'hook-function=removed'
   assert "$output" contains 'hook-entry=removed'
 }
 
-@test 'default eza_params contains all six expected flags' {
+@test 'default _zsh_eza_params contains all six expected flags' {
   make_fake_eza
 
   run_zsh_eza_shell '
     source "${ZSH_EZA_REPO}/zsh-eza.plugin.zsh"
-    print -- "${eza_params[@]}"
+    print -- "${_zsh_eza_params[@]}"
   '
 
   assert $state equals 0
@@ -187,7 +187,7 @@
   assert "$output" contains '[--color-scale=all]'
 }
 
-@test 'll alias prepends --all --header --long before eza_params' {
+@test 'll alias prepends --all --header --long before the params' {
   make_fake_eza
 
   run_zsh_eza_shell '
@@ -199,11 +199,11 @@
   assert "$output" contains 'fake-eza [--all] [--header] [--long] [--git]'
 }
 
-@test 'la alias prepends -lbhHigUmuSa before eza_params' {
+@test 'la alias prepends -lbhHigUmuSa before the params' {
   make_fake_eza
 
   run_zsh_eza_shell '
-    eza_extra_params="--extra-flag"
+    zstyle ":zsh-eza:config" extra-params "--extra-flag"
     source "${ZSH_EZA_REPO}/zsh-eza.plugin.zsh"
     eval "${aliases[la]}"
   '
@@ -213,11 +213,11 @@
   assert "$output" contains '[--extra-flag]'
 }
 
-@test 'lx alias prepends -lbhHigUmuSa@ before eza_params' {
+@test 'lx alias prepends -lbhHigUmuSa@ before the params' {
   make_fake_eza
 
   run_zsh_eza_shell '
-    eza_extra_params="--extra-flag"
+    zstyle ":zsh-eza:config" extra-params "--extra-flag"
     source "${ZSH_EZA_REPO}/zsh-eza.plugin.zsh"
     eval "${aliases[lx]}"
   '
@@ -227,16 +227,16 @@
   assert "$output" contains '[--extra-flag]'
 }
 
-@test 'eza_user_params replaces default params entirely' {
+@test 'user-params replaces default params entirely' {
   make_fake_eza
 
   run_zsh_eza_shell '
-    eza_user_params="--only-this"
+    zstyle ":zsh-eza:config" user-params "--only-this"
     source "${ZSH_EZA_REPO}/zsh-eza.plugin.zsh"
-    if [[ "${(j: :)eza_params}" == "--only-this" ]]; then
+    if [[ "${(j: :)_zsh_eza_params}" == "--only-this" ]]; then
       print -- "params=replaced"
     else
-      print -- "params=not-replaced:${(j: :)eza_params}"
+      print -- "params=not-replaced:${(j: :)_zsh_eza_params}"
     fi
     eval "${aliases[ls]}"
   '
@@ -246,23 +246,23 @@
   assert "$output" contains 'fake-eza [--only-this]'
 }
 
-@test 'eza_extra_params appends to default params without replacing them' {
+@test 'extra-params appends to default params without replacing them' {
   make_fake_eza
 
   run_zsh_eza_shell '
-    eza_extra_params="--extra-flag"
+    zstyle ":zsh-eza:config" extra-params "--extra-flag"
     source "${ZSH_EZA_REPO}/zsh-eza.plugin.zsh"
-    if [[ "${eza_params[-1]}" == "--extra-flag" ]]; then
+    if [[ "${_zsh_eza_params[-1]}" == "--extra-flag" ]]; then
       print -- "extra=appended"
     else
-      print -- "extra=not-appended:last=${eza_params[-1]}"
+      print -- "extra=not-appended:last=${_zsh_eza_params[-1]}"
     fi
-    if [[ "${eza_params[1]}" == "--git" ]]; then
+    if [[ "${_zsh_eza_params[1]}" == "--git" ]]; then
       print -- "defaults=preserved"
     else
-      print -- "defaults=missing:first=${eza_params[1]}"
+      print -- "defaults=missing:first=${_zsh_eza_params[1]}"
     fi
-    if [[ "${eza_params[(r)--icons]}" == "--icons" ]]; then
+    if [[ "${_zsh_eza_params[(r)--icons]}" == "--icons" ]]; then
       print -- "middle=preserved"
     else
       print -- "middle=missing"
@@ -275,13 +275,13 @@
   assert "$output" contains 'middle=preserved'
 }
 
-@test 'AUTOCD=1 registers zsh-eza-auto-list in chpwd_functions' {
+@test 'autocd yes registers the hook in chpwd_functions' {
   make_fake_eza
 
   run_zsh_eza_shell '
-    AUTOCD=1
+    zstyle ":zsh-eza:config" autocd yes
     source "${ZSH_EZA_REPO}/zsh-eza.plugin.zsh"
-    if [[ ${chpwd_functions[(r)zsh-eza-auto-list]} == zsh-eza-auto-list ]]; then
+    if [[ ${chpwd_functions[(r)_zsh_eza_auto_list]} == _zsh_eza_auto_list ]]; then
       print -- "hook=registered"
     else
       print -- "hook=absent"
@@ -292,13 +292,12 @@
   assert "$output" contains 'hook=registered'
 }
 
-@test 'AUTOCD=0 does not register chpwd hook' {
+@test 'autocd unset does not register the chpwd hook' {
   make_fake_eza
 
   run_zsh_eza_shell '
-    AUTOCD=0
     source "${ZSH_EZA_REPO}/zsh-eza.plugin.zsh"
-    if [[ ${chpwd_functions[(r)zsh-eza-auto-list]} == zsh-eza-auto-list ]]; then
+    if [[ ${chpwd_functions[(r)_zsh_eza_auto_list]} == _zsh_eza_auto_list ]]; then
       print -- "hook=registered"
     else
       print -- "hook=absent"
@@ -309,13 +308,13 @@
   assert "$output" contains 'hook=absent'
 }
 
-@test 'zsh-eza-auto-list hook invokes eza with default params' {
+@test '_zsh_eza_auto_list hook invokes eza with default params' {
   make_fake_eza
 
   run_zsh_eza_shell '
-    AUTOCD=1
+    zstyle ":zsh-eza:config" autocd yes
     source "${ZSH_EZA_REPO}/zsh-eza.plugin.zsh"
-    zsh-eza-auto-list
+    _zsh_eza_auto_list
   '
 
   assert $state equals 0
@@ -336,11 +335,14 @@
     else
       print -- "ls=aliased"
     fi
+    zsh-eza_plugin_unload
+    print -- "unload-rc=$?"
   '
 
   assert $state equals 0
   assert "$output" contains 'rc=0'
   assert "$output" contains 'ls=not-aliased'
+  assert "$output" contains 'unload-rc=0'
 }
 
 @test 'unload with no prior aliases removes them without error' {
@@ -361,4 +363,103 @@
   assert $state equals 0
   assert "$output" contains 'rc=0'
   assert "$output" contains 'ls=removed'
+}
+
+@test 'zstyle user-params and extra-params configure the params' {
+  make_fake_eza
+
+  run_zsh_eza_shell '
+    zstyle ":zsh-eza:config" user-params "--git --icons"
+    zstyle ":zsh-eza:config" extra-params "--tree"
+    source "${ZSH_EZA_REPO}/zsh-eza.plugin.zsh"
+    eval "${aliases[ls]}"
+  '
+
+  assert $state equals 0
+  assert "$output" contains 'fake-eza [--git] [--icons] [--tree]'
+}
+
+@test 'zstyle autocd enables chpwd hook' {
+  make_fake_eza
+
+  run_zsh_eza_shell '
+    zstyle ":zsh-eza:config" autocd yes
+    source "${ZSH_EZA_REPO}/zsh-eza.plugin.zsh"
+    if [[ ${chpwd_functions[(r)_zsh_eza_auto_list]} == _zsh_eza_auto_list ]]; then
+      print -- "hook=registered"
+    else
+      print -- "hook=absent"
+    fi
+  '
+
+  assert $state equals 0
+  assert "$output" contains 'hook=registered'
+}
+
+@test 'unload preserves an alias the user changed after load' {
+  make_fake_eza
+
+  run_zsh_eza_shell '
+    alias ls="ls --color=auto"
+    source "${ZSH_EZA_REPO}/zsh-eza.plugin.zsh"
+    alias ls="my-own-ls"
+    zsh-eza_plugin_unload
+    print -- "ls=${aliases[ls]}"
+    print -- "ll=${aliases[ll]:-removed}"
+  '
+
+  assert $state equals 0
+  assert "$output" contains 'ls=my-own-ls'
+  assert "$output" contains 'll=removed'
+}
+
+@test 'autocd no does not register the chpwd hook' {
+  make_fake_eza
+
+  run_zsh_eza_shell '
+    zstyle ":zsh-eza:config" autocd no
+    source "${ZSH_EZA_REPO}/zsh-eza.plugin.zsh"
+    if [[ ${chpwd_functions[(r)_zsh_eza_auto_list]} == _zsh_eza_auto_list ]]; then
+      print -- "hook=registered"
+    else
+      print -- "hook=absent"
+    fi
+  '
+
+  assert $state equals 0
+  assert "$output" contains 'hook=absent'
+}
+
+@test 'an empty user-params clears the default params' {
+  make_fake_eza
+
+  run_zsh_eza_shell '
+    zstyle ":zsh-eza:config" user-params ""
+    source "${ZSH_EZA_REPO}/zsh-eza.plugin.zsh"
+    eval "${aliases[ls]}"
+  '
+
+  assert $state equals 0
+  assert "$output" contains 'fake-eza'
+  assert "$output" does_not_contain '[--git]'
+}
+
+@test 'unload after a failed load restores fpath' {
+  run_zsh_eza_shell '
+    typeset -a before=( "${fpath[@]}" )
+    source "${ZSH_EZA_REPO}/zsh-eza.plugin.zsh"
+    print -- "load-rc=$?"
+    zsh-eza_plugin_unload
+    print -- "unload-rc=$?"
+    if [[ "${fpath[*]}" == "${before[*]}" ]]; then
+      print -- "fpath=restored"
+    else
+      print -- "fpath=leaked"
+    fi
+  ' "${ZSH_EZA_TEST_EMPTY_PATH}"
+
+  assert $state equals 0
+  assert "$output" contains 'load-rc=1'
+  assert "$output" contains 'unload-rc=0'
+  assert "$output" contains 'fpath=restored'
 }

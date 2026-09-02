@@ -1,0 +1,76 @@
+# -*- mode: zsh; sh-indentation: 2; indent-tabs-mode: nil; sh-basic-offset: 2; -*-
+# vim: ft=zsh sw=2 ts=2 et
+#
+# Copyright (c) 2022 Salvydas Lukosius
+
+builtin emulate -L zsh
+[[ -o xtrace ]] && setopt local_options xtrace
+builtin setopt extended_glob warn_create_global typeset_silent no_short_loops rc_quotes no_auto_pushd
+
+if [[ $TERM == 'dumb' ]]; then
+  return 0
+fi
+
+if ! (( $+commands[eza] )); then
+  print -u 2 -r -- "Please install eza before using this plugin."
+  return 1
+fi
+
+typeset -ga _zsh_eza_params
+typeset -gA _zsh_eza_saved_aliases _zsh_eza_installed_aliases
+
+_zsh_eza_params=(
+  '--git' '--icons' '--group' '--group-directories-first'
+  '--time-style=long-iso' '--color-scale=all'
+)
+
+# Declarative configuration. A style that is set wins even when its value is
+# empty or false.
+local style_user_params style_extra_params
+if zstyle -s ':zsh-eza:config' user-params style_user_params; then
+  _zsh_eza_params=( ${(z)style_user_params} )
+fi
+
+if zstyle -s ':zsh-eza:config' extra-params style_extra_params; then
+  _zsh_eza_params+=( ${(z)style_extra_params} )
+fi
+
+local alias_name
+local -a alias_names=( ls l ll llm la lx lt tree )
+for alias_name in "${alias_names[@]}"; do
+  if (( ${+aliases[$alias_name]} )); then
+    _zsh_eza_saved_aliases[$alias_name]="${aliases[$alias_name]}"
+  else
+    unset "_zsh_eza_saved_aliases[$alias_name]"
+  fi
+done
+
+builtin alias ls='eza ${(@)_zsh_eza_params}'
+builtin alias l='eza --git-ignore ${(@)_zsh_eza_params}'
+builtin alias ll='eza --all --header --long ${(@)_zsh_eza_params}'
+builtin alias llm='eza --all --header --long --sort=modified ${(@)_zsh_eza_params}'
+builtin alias la='eza -lbhHigUmuSa ${(@)_zsh_eza_params}'
+builtin alias lx='eza -lbhHigUmuSa@ ${(@)_zsh_eza_params}'
+builtin alias lt='eza --tree ${(@)_zsh_eza_params}'
+builtin alias tree='eza --tree ${(@)_zsh_eza_params}'
+
+# Record what this load installed so unload can tell its own value from a
+# later user change. See the unload contract in zsh-eza.plugin.zsh.
+_zsh_eza_installed_aliases=()
+for alias_name in "${alias_names[@]}"; do
+  _zsh_eza_installed_aliases[$alias_name]="${aliases[$alias_name]}"
+done
+
+if zstyle -t ':zsh-eza:config' autocd; then
+  autoload -Uz add-zsh-hook
+
+  _zsh_eza_auto_list() {
+    builtin emulate -L zsh
+    command eza "${_zsh_eza_params[@]}"
+  }
+
+  add-zsh-hook -d chpwd _zsh_eza_auto_list 2>/dev/null
+  add-zsh-hook chpwd _zsh_eza_auto_list
+fi
+
+return 0
