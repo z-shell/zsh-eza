@@ -443,3 +443,23 @@
   assert "$output" contains 'fake-eza'
   assert "$output" does_not_contain '[--git]'
 }
+
+@test 'unload after a failed load restores fpath' {
+  run_zsh_eza_shell '
+    typeset -a before=( "${fpath[@]}" )
+    source "${ZSH_EZA_REPO}/zsh-eza.plugin.zsh"
+    print -- "load-rc=$?"
+    zsh-eza_plugin_unload
+    print -- "unload-rc=$?"
+    if [[ "${fpath[*]}" == "${before[*]}" ]]; then
+      print -- "fpath=restored"
+    else
+      print -- "fpath=leaked"
+    fi
+  ' "${ZSH_EZA_TEST_EMPTY_PATH}"
+
+  assert $state equals 0
+  assert "$output" contains 'load-rc=1'
+  assert "$output" contains 'unload-rc=0'
+  assert "$output" contains 'fpath=restored'
+}

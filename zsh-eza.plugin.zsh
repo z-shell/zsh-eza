@@ -20,19 +20,7 @@
     fi
   fi
 
-  autoload -Uz +X _zsh_eza_init
-
-  # Load plugin
-  if (( ${+functions[_zsh_eza_init]} )); then
-    () {
-      local -i rc
-      _zsh_eza_init
-      rc=$?
-      (( rc )) && print -u 2 -r -- "Error loading zsh-eza plugin, exit code: ${rc}"
-      return "$rc"
-    } || return $?
-  fi
-
+  # Declared before loading so a failed load can still be undone.
   # https://wiki.zshell.dev/community/zsh_plugin_standard#unload-function
   # Zi dispatches ${plugin}_plugin_unload using the literal plugin name, so the
   # hyphen is required for `zi unload z-shell/zsh-eza` to reach this function.
@@ -68,4 +56,17 @@
 
     unfunction zsh-eza_plugin_unload
   }
+
+  autoload -Uz +X _zsh_eza_init
+
+  # Load plugin
+  if (( ${+functions[_zsh_eza_init]} )); then
+    () {
+      local -i rc
+      _zsh_eza_init
+      rc=$?
+      (( rc )) && print -u 2 -r -- "Error loading zsh-eza plugin, exit code: ${rc}"
+      return "$rc"
+    } || return $?
+  fi
 } "${ZERO:-${${0:#$ZSH_ARGZERO}:-${(%):-%N}}}"
