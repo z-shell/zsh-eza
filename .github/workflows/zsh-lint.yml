@@ -43,6 +43,8 @@ jobs:
         env:
           ZSH_LINT_PATHS: |
             zsh-eza.plugin.zsh
+            functions
+            tests
         run: |
           set -euo pipefail
           mapfile -t targets < <(printf '%s\n' "$ZSH_LINT_PATHS" | sed '/^[[:space:]]*$/d')

@@ -114,18 +114,21 @@ antigen bundle z-shell/zsh-eza@main
 
 ## Configuration
 
-Set configuration before loading the plugin.
+Set configuration before loading the plugin using standard `zstyle` contexts.
 
-| Variable           | Type        | Default | Effect                                           |
-| ------------------ | ----------- | ------- | ------------------------------------------------ |
-| `eza_user_params`  | Shell words | Unset   | Replaces the complete default argument list.     |
-| `eza_extra_params` | Shell words | Unset   | Appends arguments after the selected defaults.   |
-| `AUTOCD`           | Integer     | `0`     | Set to `1` to list the new directory after `cd`. |
+| Style Context     | Style          | Type        | Default | Effect                                             |
+| ----------------- | -------------- | ----------- | ------- | -------------------------------------------------- |
+| `:zsh-eza:config` | `user-params`  | Shell words | Unset   | Replaces the complete default argument list.       |
+| `:zsh-eza:config` | `extra-params` | Shell words | Unset   | Appends arguments after the selected defaults.     |
+| `:zsh-eza:config` | `autocd`       | Boolean     | `no`    | Set to `yes` to list the new directory after `cd`. |
+
+> [!NOTE]
+> Legacy global parameters (`eza_user_params`, `eza_extra_params`, `AUTOCD`) remain supported for backward compatibility.
 
 The default arguments are:
 
 ```zsh
-eza_params=(
+_zsh_eza_params=(
   '--git' '--icons' '--group' '--group-directories-first'
   '--time-style=long-iso' '--color-scale=all'
 )
@@ -134,7 +137,8 @@ eza_params=(
 For example:
 
 ```zsh
-eza_extra_params='--classify --hyperlink=auto'
+zstyle ':zsh-eza:config' extra-params '--classify --hyperlink=auto'
+zstyle ':zsh-eza:config' autocd yes
 zi light z-shell/zsh-eza
 ```
 
@@ -159,7 +163,7 @@ zi light z-shell/zsh-eza
 - Each load captures any existing aliases with the same names before
   replacement.
 - With `AUTOCD=1`, the plugin registers `zsh-eza-auto-list` as a `chpwd` hook.
-- `zsh-eza_plugin_unload` removes the hook and plugin functions, removes
+- `zsh_eza_plugin_unload` removes the hook and plugin functions, removes
   plugin-owned state, and restores aliases captured by the most recent load.
 
 ## Verification

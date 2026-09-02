@@ -1,0 +1,93 @@
+# -*- mode: zsh; sh-indentation: 2; indent-tabs-mode: nil; sh-basic-offset: 2; -*-
+# vim: ft=zsh sw=2 ts=2 et
+#
+# Copyright (c) 2022 Salvydas Lukosius
+
+builtin emulate -L zsh
+[[ -o xtrace ]] && setopt local_options xtrace
+builtin setopt extended_glob warn_create_global typeset_silent no_short_loops rc_quotes no_auto_pushd
+
+if [[ $TERM == 'dumb' ]]; then
+  return 0
+fi
+
+if ! (( $+commands[eza] )); then
+  print -u 2 -r -- "Please install eza before using this plugin."
+  return 1
+fi
+
+typeset -ga eza_params _zsh_eza_params
+typeset -ga ZSH_EZA_ALIAS_NAMES _zsh_eza_alias_names
+typeset -gA ZSH_EZA_SAVED_ALIASES _zsh_eza_saved_aliases
+
+_zsh_eza_params=(
+  '--git' '--icons' '--group' '--group-directories-first'
+  '--time-style=long-iso' '--color-scale=all'
+)
+
+# Read declarative zstyle configuration with fallback to legacy global variables
+local style_user_params style_extra_params
+zstyle -s ':zsh-eza:config' user-params style_user_params
+zstyle -s ':zsh-eza:config' extra-params style_extra_params
+
+if [[ -n $style_user_params ]]; then
+  _zsh_eza_params=( ${(z)style_user_params} )
+elif [[ -n ${eza_user_params-} ]]; then
+  _zsh_eza_params=( ${(z)eza_user_params} )
+fi
+
+if [[ -n $style_extra_params ]]; then
+  _zsh_eza_params+=( ${(z)style_extra_params} )
+elif [[ -n ${eza_extra_params-} ]]; then
+  _zsh_eza_params+=( ${(z)eza_extra_params} )
+fi
+
+eza_params=( "${_zsh_eza_params[@]}" )
+
+_zsh_eza_alias_names=( ls l ll llm la lx lt tree )
+ZSH_EZA_ALIAS_NAMES=( "${_zsh_eza_alias_names[@]}" )
+
+local alias_name
+for alias_name in "${_zsh_eza_alias_names[@]}"; do
+  if (( ${+aliases[$alias_name]} )); then
+    _zsh_eza_saved_aliases[$alias_name]="${aliases[$alias_name]}"
+    ZSH_EZA_SAVED_ALIASES[$alias_name]="${aliases[$alias_name]}"
+  else
+    unset "_zsh_eza_saved_aliases[$alias_name]" "ZSH_EZA_SAVED_ALIASES[$alias_name]"
+  fi
+done
+
+builtin alias ls='eza ${(@)eza_params}'
+builtin alias l='eza --git-ignore ${(@)eza_params}'
+builtin alias ll='eza --all --header --long ${(@)eza_params}'
+builtin alias llm='eza --all --header --long --sort=modified ${(@)eza_params}'
+builtin alias la='eza -lbhHigUmuSa ${(@)eza_params}'
+builtin alias lx='eza -lbhHigUmuSa@ ${(@)eza_params}'
+builtin alias lt='eza --tree ${(@)eza_params}'
+builtin alias tree='eza --tree ${(@)eza_params}'
+
+local is_autocd=0
+if zstyle -t ':zsh-eza:config' autocd; then
+  is_autocd=1
+elif (( ${AUTOCD:-0} == 1 )); then
+  is_autocd=1
+fi
+
+if (( is_autocd == 1 )); then
+  autoload -Uz add-zsh-hook
+
+  _zsh_eza_auto_list() {
+    builtin emulate -L zsh
+    command eza "${eza_params[@]}"
+  }
+
+  zsh-eza-auto-list() {
+    _zsh_eza_auto_list "$@"
+  }
+
+  add-zsh-hook -d chpwd zsh-eza-auto-list 2>/dev/null
+  add-zsh-hook -d chpwd _zsh_eza_auto_list 2>/dev/null
+  add-zsh-hook chpwd _zsh_eza_auto_list
+fi
+
+return 0

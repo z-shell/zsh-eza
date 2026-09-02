@@ -7,53 +7,73 @@
 () {
   builtin emulate -L zsh
 
-  typeset -r source_path="${${(M)1:#/*}:-$PWD/$1}"
-  typeset -r plugin_dir=${source_path:h}
+  local -r source_path=${1:a}
+  local -r plugin_dir=${source_path:h}
 
-# https://wiki.zshell.dev/community/zsh_plugin_standard#standard-plugins-hash
-typeset -gA Plugins
-Plugins[ZSH_EZA]="$plugin_dir"
+  typeset -g _zsh_eza_plugin_dir="$plugin_dir"
 
-# https://wiki.zshell.dev/community/zsh_plugin_standard#funtions-directory
-typeset -g ZSH_EZA_FPATH="${plugin_dir}/functions"
-if [[ $PMSPEC != *f* ]]; then
-  fpath+=( "${ZSH_EZA_FPATH}" )
-fi
-
-autoload -Uz +X .zsh-eza
-
-# Load plugin
-(( ${+functions[.zsh-eza]} )) && {
-  () {
-    local -i rc
-    .zsh-eza
-    rc=$?
-    (( rc )) && print -u2 "Error loading zsh-eza plugin, exit code: ${rc}"
-    return "$rc"
-  } || return $?
-}
-
-# https://wiki.zshell.dev/community/zsh_plugin_standard#unload-function
-zsh-eza_plugin_unload() {
-  local alias_name
-
-  fpath=("${fpath[@]:#${ZSH_EZA_FPATH}}")
-
-  autoload -Uz add-zsh-hook
-  add-zsh-hook -d chpwd zsh-eza-auto-list 2>/dev/null
-  unfunction zsh-eza-auto-list 2>/dev/null
-  unfunction .zsh-eza 2>/dev/null
-
-  for alias_name in "${ZSH_EZA_ALIAS_NAMES[@]}"; do
-    builtin unalias "${alias_name}" 2>/dev/null
-
-    if (( ${+parameters[ZSH_EZA_SAVED_ALIASES]} )) && (( ${+ZSH_EZA_SAVED_ALIASES[$alias_name]} )); then
-      aliases[$alias_name]="${ZSH_EZA_SAVED_ALIASES[$alias_name]}"
+  # https://wiki.zshell.dev/community/zsh_plugin_standard#functions-directory
+  typeset -g _zsh_eza_fpath="${plugin_dir}/functions"
+  if [[ $PMSPEC != *f* ]]; then
+    if (( ! ${fpath[(Ie)${_zsh_eza_fpath}]} )); then
+      fpath+=( "${_zsh_eza_fpath}" )
     fi
-  done
+  fi
 
-  unset eza_params ZSH_EZA_ALIAS_NAMES ZSH_EZA_SAVED_ALIASES ZSH_EZA_FPATH 'Plugins[ZSH_EZA]'
+  autoload -Uz +X _zsh_eza_init
 
-  unfunction zsh-eza_plugin_unload
-}
+  # Load plugin
+  if (( ${+functions[_zsh_eza_init]} )); then
+    () {
+      local -i rc
+      _zsh_eza_init
+      rc=$?
+      (( rc )) && print -u 2 -r -- "Error loading zsh-eza plugin, exit code: ${rc}"
+      return "$rc"
+    } || return $?
+  fi
+
+  # https://wiki.zshell.dev/community/zsh_plugin_standard#unload-function
+  zsh_eza_plugin_unload() {
+    builtin emulate -L zsh
+
+    # Restore fpath
+    local plugin_functions="${_zsh_eza_fpath:-${_zsh_eza_plugin_dir}/functions}"
+    fpath=( "${fpath[@]:#${plugin_functions}}" )
+    if (( ${+parameters[ZSH_EZA_FPATH]} )); then
+      fpath=( "${fpath[@]:#${ZSH_EZA_FPATH}}" )
+    fi
+
+    autoload -Uz add-zsh-hook
+    add-zsh-hook -d chpwd zsh-eza-auto-list 2>/dev/null
+    add-zsh-hook -d chpwd _zsh_eza_auto_list 2>/dev/null
+    unfunction zsh-eza-auto-list _zsh_eza_auto_list _zsh_eza_init .zsh-eza 2>/dev/null
+
+    local alias_name
+    local -a alias_names=( ls l ll llm la lx lt tree )
+    if (( ${+parameters[_zsh_eza_alias_names]} )); then
+      alias_names=( "${_zsh_eza_alias_names[@]}" )
+    elif (( ${+parameters[ZSH_EZA_ALIAS_NAMES]} )); then
+      alias_names=( "${ZSH_EZA_ALIAS_NAMES[@]}" )
+    fi
+
+    for alias_name in "${alias_names[@]}"; do
+      # Ownership-aware restoration: restore only if still defined
+      if (( ${+aliases[$alias_name]} )); then
+        builtin unalias "${alias_name}" 2>/dev/null
+      fi
+
+      if (( ${+parameters[_zsh_eza_saved_aliases]} )) && (( ${+_zsh_eza_saved_aliases[$alias_name]} )); then
+        aliases[$alias_name]="${_zsh_eza_saved_aliases[$alias_name]}"
+      elif (( ${+parameters[ZSH_EZA_SAVED_ALIASES]} )) && (( ${+ZSH_EZA_SAVED_ALIASES[$alias_name]} )); then
+        aliases[$alias_name]="${ZSH_EZA_SAVED_ALIASES[$alias_name]}"
+      fi
+    done
+
+    unset eza_params _zsh_eza_params ZSH_EZA_ALIAS_NAMES _zsh_eza_alias_names \
+          ZSH_EZA_SAVED_ALIASES _zsh_eza_saved_aliases ZSH_EZA_FPATH _zsh_eza_fpath \
+          _zsh_eza_plugin_dir
+
+    unfunction zsh_eza_plugin_unload
+  }
 } "${ZERO:-${${0:#$ZSH_ARGZERO}:-${(%):-%N}}}"

@@ -26,7 +26,7 @@ jobs:
         uses: z-shell/.github/actions/setup-zsh@4403e5a200c63596f641966dfb64e08a7a655ffa # main
       - name: Check Zsh syntax
         run: |
-          find . -type f \( -name '*.zsh' -o -path './functions/.*' \) -print | sort | while read -r file; do
+          find . -type f \( -name '*.zsh' -o -path './functions/*' \) -print | sort | while read -r file; do
             zsh -n "$file"
             zsh -fc 'zcompile -- "$1"' zsh "$file"
             rm -f "${file}.zwc"

@@ -27,14 +27,14 @@ A Zsh plugin that replaces GNU `ls` aliases with [`eza`](https://github.com/eza-
 
 ## Plugin structure
 
-| Path                  | Purpose                                                                      |
-| --------------------- | ---------------------------------------------------------------------------- |
-| `zsh-eza.plugin.zsh`  | Entry point sourced by plugin manager                                        |
-| `functions/.zsh-eza`  | Plugin logic: guards, params, aliases, AUTOCD hook                           |
-| `tests/zsh-eza.zunit` | ZUnit test suite                                                             |
-| `tests/helpers.zsh`   | Test helpers: `make_fake_eza`, `run_zsh_eza_shell`, `run_zsh_eza_dumb_shell` |
-| `tests/setup.zsh`     | ZUnit setup/teardown: tmp dir lifecycle                                      |
-| `docs/README.md`      | User-facing documentation                                                    |
+| Path                      | Purpose                                                                      |
+| ------------------------- | ---------------------------------------------------------------------------- |
+| `zsh-eza.plugin.zsh`      | Entry point sourced by plugin manager                                        |
+| `functions/_zsh_eza_init` | Plugin logic: guards, params, aliases, AUTOCD hook                           |
+| `tests/zsh-eza.zunit`     | ZUnit test suite                                                             |
+| `tests/helpers.zsh`       | Test helpers: `make_fake_eza`, `run_zsh_eza_shell`, `run_zsh_eza_dumb_shell` |
+| `tests/setup.zsh`         | ZUnit setup/teardown: tmp dir lifecycle                                      |
+| `docs/README.md`          | User-facing documentation                                                    |
 
 Review the plugin against the
 [Z-Shell Plugin Standard](https://wiki.zshell.dev/community/zsh_plugin_standard),
@@ -43,10 +43,10 @@ while keeping portable behavior separate from optional manager profiles:
 - Portable loading accepts a manager-supplied `ZERO` and retains a direct-source
   fallback. For self-location changes, follow the current organization Zsh
   instruction and do not copy retired entry-point snippets from `PATTERNS.md`.
-- `Plugins[ZSH_EZA]` registration and the `PMSPEC` `f` capability guard are
-  optional manager integrations, not portable requirements or Zsh semantics.
-  Direct sourcing must continue to work without manager-provided state.
-- The repository declares an unload contract through `zsh-eza_plugin_unload`,
+- `PMSPEC` `f` capability guard is an optional manager integration, not a
+  portable requirement or Zsh semantics. Direct sourcing must continue to work
+  without manager-provided state.
+- The repository declares an unload contract through `zsh_eza_plugin_unload`,
   which reverses plugin-owned side effects.
 
 ## Public API
