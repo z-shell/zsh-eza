@@ -24,7 +24,6 @@
   # https://wiki.zshell.dev/community/zsh_plugin_standard#unload-function
   # Zi dispatches ${plugin}_plugin_unload using the literal plugin name, so the
   # hyphen is required for `zi unload z-shell/zsh-eza` to reach this function.
-  # zsh-lint disable=plugin/function-namespace -- Zi dispatches ${plugin}_plugin_unload verbatim
   zsh-eza_plugin_unload() {
     builtin emulate -L zsh
 
