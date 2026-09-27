@@ -1,0 +1,31 @@
+---
+name: Zsh Lint Pilot
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  zsh-lint-pilot:
+    name: Observe Zsh Lint
+    uses: z-shell/.github/.github/workflows/zsh-lint.yml@af725f0ad9c7b24dd4f4527e582ade2eb8e9ea7b # main
+    with:
+      paths: |
+        zsh-eza.plugin.zsh
+        functions
+        tests/helpers.zsh
+        tests/setup.zsh
+      zsh-lint-ref: 999cb76cc65ef6af56c0ae65ab0f3622eb527944 # v1.3.0
+      config: zsh-lint.json
+      mode: observe
+      artifact-name: zsh-lint-pilot-report
