@@ -128,6 +128,60 @@
   assert "$output" contains 'hook-entry=removed'
 }
 
+@test 'reload after unload restores the aliases and a working autocd hook' {
+  make_fake_eza
+
+  # Load, unload and load again in one shell. Presence alone would accept an
+  # inert hook, so each load is judged by what `ls` and a directory change
+  # actually run.
+  run_zsh_eza_shell '
+    alias ls="ls --color=auto"
+    zstyle ":zsh-eza:config" autocd yes
+
+    zsh_eza_probe() {
+      local name
+      local -a surface
+      for name in ls l ll llm la lx lt tree; do
+        surface+=( "${name}=${aliases[$name]-unset}" )
+      done
+      print -r -- "${1}-aliases=${(j:;:)surface}"
+      print -r -- "${1}-ls=$(eval ls)"
+      print -r -- "${1}-autocd=$(cd "$HOME")"
+    }
+
+    source "${ZSH_EZA_REPO}/zsh-eza.plugin.zsh" || print -- "load-failed"
+    zsh_eza_probe first
+    zsh-eza_plugin_unload
+    source "${ZSH_EZA_REPO}/zsh-eza.plugin.zsh" || print -- "reload-failed"
+    zsh_eza_probe second
+    zsh-eza_plugin_unload
+
+    print -r -- "final-ls=${aliases[ls]}"
+    (( ${+functions[_zsh_eza_auto_list]} )) || print -- "final-hook-function=removed"
+    (( ${chpwd_functions[(Ie)_zsh_eza_auto_list]} )) || print -- "final-hook-entry=removed"
+  '
+
+  assert $state equals 0
+  assert "$output" does_not_contain 'load-failed'
+  assert "$output" does_not_contain 'reload-failed'
+
+  local -A seen
+  local line
+  for line in "${lines[@]}"; do
+    [[ $line == (first|second)-*=* ]] && seen[${line%%=*}]=${line#*=}
+  done
+
+  local expected='fake-eza [--git] [--icons] [--group] [--group-directories-first] [--time-style=long-iso] [--color-scale=all]'
+  assert "${seen[first-ls]}" same_as "$expected"
+  assert "${seen[first-autocd]}" same_as "$expected"
+  assert "${seen[second-aliases]}" same_as "${seen[first-aliases]}"
+  assert "${seen[second-ls]}" same_as "$expected"
+  assert "${seen[second-autocd]}" same_as "$expected"
+  assert "$output" contains 'final-ls=ls --color=auto'
+  assert "$output" contains 'final-hook-function=removed'
+  assert "$output" contains 'final-hook-entry=removed'
+}
+
 @test 'default _zsh_eza_params contains all six expected flags' {
   make_fake_eza
 
