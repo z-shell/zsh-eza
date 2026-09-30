@@ -138,25 +138,31 @@
     alias ls="ls --color=auto"
     zstyle ":zsh-eza:config" autocd yes
 
-    zsh_eza_probe() {
+    zsh_eza_surface() {
       local name
       local -a surface
       for name in ls l ll llm la lx lt tree; do
         surface+=( "${name}=${aliases[$name]-unset}" )
       done
       print -r -- "${1}-aliases=${(j:;:)surface}"
-      print -r -- "${1}-ls=$(eval ls)"
-      print -r -- "${1}-autocd=$(cd "$HOME")"
     }
 
+    # Every output line counts: a hook registered twice runs eza twice.
+    zsh_eza_probe() {
+      zsh_eza_surface "$1"
+      print -r -- "${1}-ls=${(j:|:)${(f)"$(eval ls)"}}"
+      print -r -- "${1}-autocd=${(j:|:)${(f)"$(cd "$HOME")"}}"
+    }
+
+    zsh_eza_surface pre
     source "${ZSH_EZA_REPO}/zsh-eza.plugin.zsh" || print -- "load-failed"
     zsh_eza_probe first
     zsh-eza_plugin_unload
     source "${ZSH_EZA_REPO}/zsh-eza.plugin.zsh" || print -- "reload-failed"
     zsh_eza_probe second
     zsh-eza_plugin_unload
+    zsh_eza_surface final
 
-    print -r -- "final-ls=${aliases[ls]}"
     (( ${+functions[_zsh_eza_auto_list]} )) || print -- "final-hook-function=removed"
     (( ${chpwd_functions[(Ie)_zsh_eza_auto_list]} )) || print -- "final-hook-entry=removed"
   '
@@ -168,16 +174,20 @@
   local -A seen
   local line
   for line in "${lines[@]}"; do
-    [[ $line == (first|second)-*=* ]] && seen[${line%%=*}]=${line#*=}
+    [[ $line == (pre|first|second|final)-*=* ]] && seen[${line%%=*}]=${line#*=}
   done
 
   local expected='fake-eza [--git] [--icons] [--group] [--group-directories-first] [--time-style=long-iso] [--color-scale=all]'
+  local before='ls=ls --color=auto;l=unset;ll=unset;llm=unset;la=unset;lx=unset;lt=unset;tree=unset'
+  local loaded='ls=eza ${(@)_zsh_eza_params};l=eza --git-ignore ${(@)_zsh_eza_params};ll=eza --all --header --long ${(@)_zsh_eza_params};llm=eza --all --header --long --sort=modified ${(@)_zsh_eza_params};la=eza -lbhHigUmuSa ${(@)_zsh_eza_params};lx=eza -lbhHigUmuSa@ ${(@)_zsh_eza_params};lt=eza --tree ${(@)_zsh_eza_params};tree=eza --tree ${(@)_zsh_eza_params}'
+  assert "${seen[pre-aliases]}" same_as "$before"
+  assert "${seen[first-aliases]}" same_as "$loaded"
   assert "${seen[first-ls]}" same_as "$expected"
   assert "${seen[first-autocd]}" same_as "$expected"
-  assert "${seen[second-aliases]}" same_as "${seen[first-aliases]}"
+  assert "${seen[second-aliases]}" same_as "$loaded"
   assert "${seen[second-ls]}" same_as "$expected"
   assert "${seen[second-autocd]}" same_as "$expected"
-  assert "$output" contains 'final-ls=ls --color=auto'
+  assert "${seen[final-aliases]}" same_as "$before"
   assert "$output" contains 'final-hook-function=removed'
   assert "$output" contains 'final-hook-entry=removed'
 }
