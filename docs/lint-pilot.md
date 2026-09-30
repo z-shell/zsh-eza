@@ -11,7 +11,7 @@ The explicit [configuration](../zsh-lint.json) retains the repository's Zsh 5.9.
 | `tests/helpers.zsh`       | `test-fixture`      |
 | `tests/setup.zsh`         | `test-fixture`      |
 
-The directory input includes every file under `functions/`; additions need the same source-profile review. The ZUnit test DSL and vendored tools remain outside this analyzer inventory and retain their existing validation.
+The directory input includes every file under `functions/`; additions need the same source-profile review. The ZUnit test DSL remains outside this analyzer inventory and retains its existing validation.
 
 The workflow pins the reviewed shared implementation at `af725f0ad9c7b24dd4f4527e582ade2eb8e9ea7b` and analyzer release v1.3.0 at `999cb76cc65ef6af56c0ae65ab0f3622eb527944`. Its artifact records both revisions, resolved inventory, diagnostics, stderr and outcome. Artifact retention is 14 days; lasting qualification evidence belongs on issue #126.
 

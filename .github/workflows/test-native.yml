@@ -24,12 +24,17 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: Set up Zsh
         uses: z-shell/.github/actions/setup-zsh@4403e5a200c63596f641966dfb64e08a7a655ffa # main
-      - name: Install git and curl
-        run: sudo apt-get update && sudo apt-get install -yq git curl
-      - name: Make vendored bin executable
-        run: chmod u+x bin/{color,revolver,zunit}
+      - name: Build ZUnit 0.8.2
+        run: |
+          git init "$RUNNER_TEMP/zunit.git"
+          git -C "$RUNNER_TEMP/zunit.git" remote add origin https://github.com/z-shell/zunit.git
+          git -C "$RUNNER_TEMP/zunit.git" fetch --depth 1 origin 15061c83373be80b523988121b7ba12c6b2d82dc
+          git -C "$RUNNER_TEMP/zunit.git" checkout --detach FETCH_HEAD
+          zsh -f -c 'cd "$1" && ./build.zsh' zsh "$RUNNER_TEMP/zunit.git"
+          mkdir -p "$RUNNER_TEMP/zunit-bin"
+          mv "$RUNNER_TEMP/zunit.git/zunit" "$RUNNER_TEMP/zunit-bin/zunit"
       - name: Run ZUnit suite
         run: |
-          export PATH="$PWD/bin:$PATH"
+          export PATH="$RUNNER_TEMP/zunit-bin:$PATH"
           export ZSH_EZA_REPO="$PWD"
           zunit --tap --verbose tests/zsh-eza.zunit
