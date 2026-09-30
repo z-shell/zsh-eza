@@ -19,9 +19,11 @@ EOF
 _run_zsh_eza_isolated_shell() {
   builtin emulate -L zsh
 
+  # The script and PATH arrive in parameters, not as arguments: ZUnit's `run`
+  # re-evaluates its arguments, which would expand the script too early.
   local term=$1
-  local script=$2
-  local path_value=$3
+  local script=$_zsh_eza_test_script
+  local path_value=$_zsh_eza_test_path
   local shell_path
   shell_path="$(command -v zsh)"
 
@@ -45,19 +47,19 @@ _run_zsh_eza_isolated_shell() {
 run_zsh_eza_shell() {
   builtin emulate -L zsh
 
-  local script=$1
-  local path_value=${2:-${ZSH_EZA_TEST_BIN}:${PATH}}
+  typeset -g _zsh_eza_test_script=$1
+  typeset -g _zsh_eza_test_path=${2:-${ZSH_EZA_TEST_BIN}:${PATH}}
 
-  run _run_zsh_eza_isolated_shell xterm "${script}" "${path_value}"
+  run _run_zsh_eza_isolated_shell xterm
 }
 
 run_zsh_eza_dumb_shell() {
   builtin emulate -L zsh
 
-  local script=$1
-  local path_value=${2:-${ZSH_EZA_TEST_BIN}:${PATH}}
+  typeset -g _zsh_eza_test_script=$1
+  typeset -g _zsh_eza_test_path=${2:-${ZSH_EZA_TEST_BIN}:${PATH}}
 
-  run _run_zsh_eza_isolated_shell dumb "${script}" "${path_value}"
+  run _run_zsh_eza_isolated_shell dumb
 }
 
 run_zsh_eza_entrypoint_state() {

@@ -175,11 +175,12 @@ zi light z-shell/zsh-eza
 
 ## Verification
 
-The repository includes its ZUnit runner. From the repository root:
+The tests use [ZUnit](https://github.com/z-shell/zunit) 0.8.2, which is not
+shipped with the plugin. With `zunit` on `PATH`, from the repository root:
 
 ```bash
 export ZSH_EZA_REPO="$PWD"
-PATH="$PWD/bin:$PATH" zunit --tap --verbose tests/zsh-eza.zunit
+zunit --tap --verbose tests/zsh-eza.zunit
 ```
 
 The suite uses a fake `eza` executable; a system installation is not required

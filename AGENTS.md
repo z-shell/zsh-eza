@@ -82,9 +82,10 @@ All public configuration goes through the `:zsh-eza:config` `zstyle` context.
 ## Running tests
 
 ```bash
-# From the repo root — ZUnit must be in PATH (see .github/workflows/test-native.yml for install steps)
+# From the repo root. ZUnit 0.8.2 must be on PATH; CI builds it from
+# z-shell/zunit 15061c8 (see .github/workflows/test-native.yml).
 export ZSH_EZA_REPO="$PWD"
-PATH="$PWD/bin:$PATH" zunit --tap --verbose tests/zsh-eza.zunit
+zunit --tap --verbose tests/zsh-eza.zunit
 ```
 
 All tests use a fake `eza` stub. No real `eza` binary required.
