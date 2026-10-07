@@ -25,6 +25,13 @@ lint:
     - prettier@3.8.3
     - actionlint@1.7.12
     - gitleaks@8.30.1
+  # Vendored organization skills are installed at a pinned revision, and
+  # org-routing.py check compares resource files byte for byte; formatting
+  # them would break the pin.
+  ignore:
+    - linters: [prettier, markdownlint]
+      paths:
+        - .github/skills/**
 runtimes:
   enabled:
     - python@3.14.4
