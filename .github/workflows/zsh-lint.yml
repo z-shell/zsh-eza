@@ -28,14 +28,14 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: z-shell/zsh-lint
-          ref: 33bce8041faa1395455562c5a558a063ccdcc441 # v1.2.0
+          ref: aff60185cddb4b829f39f2db82aae9fc7bce3e7d # v1.4.0
           path: .zsh-lint-tool
           persist-credentials: false
       - name: Set up Go
         uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
         with:
           cache: false
-          go-version: "1.25"
+          go-version-file: .zsh-lint-tool/go.mod
       - name: Build zsh-lint
         run: go build -C .zsh-lint-tool -o "$RUNNER_TEMP/zsh-lint" ./cmd/zsh-lint
       - name: Run configured advisory profile
