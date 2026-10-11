@@ -16,6 +16,20 @@ if ! (( $+commands[eza] )); then
   return 1
 fi
 
+# Warn when the installed eza is older than the latest upstream release.
+local eza_version latest_version
+eza_version=${ command eza --version 2>/dev/null }
+if [[ $eza_version =~ v([0-9]+\.[0-9]+\.[0-9]+) ]]; then
+  eza_version=${BASH_REMATCH[1]}
+fi
+latest_version=$(command curl -fsSL --max-time 2 https://api.github.com/repos/eza-community/eza/releases/latest 2>/dev/null)
+if [[ $latest_version =~ '"tag_name": *"v([0-9.]+)"' ]]; then
+  latest_version=${BASH_REMATCH[1]}
+  if [[ -n $eza_version && $eza_version != $latest_version ]]; then
+    print -u 2 -r -- "zsh-eza: eza ${eza_version} is older than the latest release ${latest_version}."
+  fi
+fi
+
 typeset -ga _zsh_eza_params
 typeset -gA _zsh_eza_saved_aliases _zsh_eza_installed_aliases
 
